@@ -2,18 +2,20 @@ package com.example.velocok_beta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MySpeedList {
-    private List<Float> list = new ArrayList<>();
+    private BlockingQueue<Double> list = new LinkedBlockingQueue<>() ;
 
 
-    public void add(Float el){
+    public synchronized void add(Double el){
         list.add(el);
     }
 
-    public float getAverageSpeed(){
+    public synchronized float getAverageSpeed(){
         float sum = 0;
-        for (float speed : list){
+        for (Double speed : list){
             sum += speed;
         }
         return sum / list.size();

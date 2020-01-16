@@ -1,5 +1,7 @@
 package com.example.velocok_beta;
 
+import com.example.velocok_beta.MySpeedList;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -23,25 +26,37 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity" ;
+
+    AtomicBoolean isUpdated;
+    MySpeedList speedList;
+
     TextView coordinate_testView;
     LocationManager locationManager;
     LocationListener locationListener;
+
+
+    int gpsInterval = 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         coordinate_testView = findViewById(R.id.coordinate_testView);
-        locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener(coordinate_testView);
+        speedList=new MySpeedList();
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new MyLocationListener(speedList);
+
+        isUpdated= new AtomicBoolean(true);
+
 
         if (ContextCompat.checkSelfPermission( this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e(TAG,"no permissions");
-            // TODO: Consider calling
-            //    Activity#requestPermissions
+
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1
                     );
@@ -54,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+                LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -79,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+                  //TODO add execute of mycore
 
                 } else {
                     Toast toast= Toast.makeText(this, "The app cannot work without GPS permission",Toast.LENGTH_LONG);

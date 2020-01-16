@@ -4,25 +4,25 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
+
 
 
 public class MyLocationListener implements LocationListener  {
 
     private static final String TAG = "MyLocationListener ";
-    private TextView coordinate_textView;
-    private String formattedOutput="Lat: %3.4f \nLong: %3.4f";
 
+    private MySpeedList speedList;
 
-    MyLocationListener(TextView textView){
-        coordinate_textView=textView;
+    MyLocationListener(MySpeedList list){
+        speedList=list;
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        String out=String.format(formattedOutput,location.getLatitude(),location.getLongitude());
-        Log.d(TAG, out);
-     //   coordinate_textView.setText(out);
+
+        Log.d(TAG,Float.toString(location.getSpeed()));
+        speedList.add((double) location.getSpeed());
+        Log.d(TAG,Float.toString(speedList.getAverageSpeed()));
     }
 
     @Override
@@ -39,6 +39,5 @@ public class MyLocationListener implements LocationListener  {
     public void onProviderDisabled(String provider) {
 
     }
-
 
 }
