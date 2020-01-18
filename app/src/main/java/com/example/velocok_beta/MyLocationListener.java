@@ -5,6 +5,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class MyLocationListener implements LocationListener  {
@@ -12,18 +13,19 @@ public class MyLocationListener implements LocationListener  {
     private static final String TAG = "MyLocationListener ";
 
     private MySpeedList speedList;
+    AtomicBoolean isUpdated;
 
-    MyLocationListener(MySpeedList list){
+    MyLocationListener(MySpeedList list,AtomicBoolean atomBool){
         speedList=list;
+        isUpdated=atomBool;
     }
 
     @Override
     public void onLocationChanged(Location location) {
 
-        Log.d(TAG,Float.toString(location.getSpeed()));
-        speedList.add((double) location.getSpeed());
-        Log.d(TAG,Float.toString(speedList.getAverageSpeed()));
-    }
+        speedList.add(location.getSpeed());
+        isUpdated.set(true);
+}
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {

@@ -1,7 +1,5 @@
 package com.example.velocok_beta;
 
-import com.example.velocok_beta.MySpeedList;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -23,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,45 +33,47 @@ public class MainActivity extends AppCompatActivity {
 
     AtomicBoolean isUpdated;
     MySpeedList speedList;
+    boolean isMonitoring=false;
 
-    TextView coordinate_testView;
+    TextView avgSpeedView;
+    TextView instantSpeedView;
+    Button monitoringButton;
+
     LocationManager locationManager;
     LocationListener locationListener;
 
+    MyLogicTask myLogicTask;
 
     int gpsInterval = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        coordinate_testView = findViewById(R.id.coordinate_testView);
-        speedList=new MySpeedList();
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener(speedList);
-
-        isUpdated= new AtomicBoolean(true);
-
-
-        if (ContextCompat.checkSelfPermission( this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG,"no permissions");
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1
-                    );
-
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for Activity#requestPermissions for more details.
-            return;
-        }
-        locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
-
-
         setContentView(R.layout.activity_main);
+
+        avgSpeedView = findViewById(R.id.avgSpeedView);
+        instantSpeedView= findViewById(R.id.instantSpeedView);
+        monitoringButton=findViewById(R.id.button);
+
+        speedList=new MySpeedList();
+        isUpdated= new AtomicBoolean(false);     //maybe better in MySpeedList
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new MyLocationListener(speedList,isUpdated);
+
+        avgSpeedView.setText("initialising...");
+        instantSpeedView.setText("initialising...");
+
+        myLogicTask =new MyLogicTask(speedList,isUpdated,avgSpeedView,instantSpeedView);
+
+        myLogicTask.execute();
+
+
+
+
+
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -86,7 +87,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void monitoringButton(View v){
+        if (isMonitoring){
+            isMonitoring=false;
+            locationManager.removeUpdates(locationListener);
+            monitoringButton.setText("Start");
+        }else{
+            speedList.clear();
+            checkPermission();
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+            isMonitoring=true;
+            monitoringButton.setText("Stop");
+        }
+    }
+
     @SuppressLint("MissingPermission")
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
@@ -109,6 +127,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void checkPermission(){
+        if (ContextCompat.checkSelfPermission( this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG,"no permissions");
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1
+            );
+
+            return;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
