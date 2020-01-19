@@ -23,7 +23,7 @@ public class MyLocationListener implements LocationListener  {
     @Override
     public void onLocationChanged(Location location) {
 
-        speedList.add(location.getSpeed());
+        speedList.add(location.getSpeed()*3.6F);
         isUpdated.set(true);
 }
 
