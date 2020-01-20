@@ -14,18 +14,36 @@ public class MyLocationListener implements LocationListener  {
 
     private MySpeedList speedList;
     AtomicBoolean isUpdated;
+    AtomicBoolean isMonitoring;
 
-    MyLocationListener(MySpeedList list,AtomicBoolean atomBool){
+    Location[] locations;
+
+
+
+    MyLocationListener(MySpeedList list,AtomicBoolean atomBoolUpd,AtomicBoolean atomBoolMon){
         speedList=list;
-        isUpdated=atomBool;
+        isUpdated=atomBoolUpd;
+        isMonitoring=atomBoolMon;
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        Location start= new Location("");
+        start.setLongitude(8.908138);
+        start.setLatitude(44.411093);
+        Log.d(TAG,Float.toString(start.distanceTo(location)));
+        if(!isMonitoring.get()){
+            if(start.distanceTo(location)<20){
+                Log.d(TAG,"start monitoring");
+                isMonitoring.set(true);
+            }
+        }
+        if(isMonitoring.get()) {
+            speedList.add(location.getSpeed() * 3.6F);
+            isUpdated.set(true);
+        }
+    }
 
-        speedList.add(location.getSpeed()*3.6F);
-        isUpdated.set(true);
-}
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {

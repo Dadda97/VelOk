@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     AtomicBoolean isUpdated;
     MySpeedList speedList;
-    boolean isMonitoring=false;
+    AtomicBoolean isMonitoring;
 
     TextView avgSpeedView;
     TextView instantSpeedView;
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     MyLogicTask myLogicTask;
 
     int gpsInterval = 1000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,20 +61,23 @@ public class MainActivity extends AppCompatActivity {
 
         speedList=new MySpeedList();
         isUpdated= new AtomicBoolean(false);     //maybe better in MySpeedList
+        isMonitoring = new AtomicBoolean(false);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener(speedList,isUpdated);
+        locationListener = new MyLocationListener(speedList,isUpdated,isMonitoring);
 
-        avgSpeedView.setText("initialising...");
-        instantSpeedView.setText("initialising...");
+
+        avgSpeedView.setText("waiting...");
+        instantSpeedView.setText("waiting...");
+
+        checkPermission();
+
+        locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
 
         myLogicTask =new MyLogicTask(speedList,isUpdated,avgSpeedView,instantSpeedView);
 
         myLogicTask.execute();
-
-
-
-
 
 
 
@@ -90,20 +94,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void monitoringButton(View v){
-        if (isMonitoring){
-            isMonitoring=false;
-            locationManager.removeUpdates(locationListener);
-            monitoringButton.setText("Start");
-        }else{
-            speedList.clear();
-            checkPermission();
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
-            isMonitoring=true;
-            monitoringButton.setText("Stop");
-        }
-    }
+//    public void monitoringButton(View v){
+//        if (isMonitoring){
+//            isMonitoring=false;
+//            locationManager.removeUpdates(locationListener);
+//            monitoringButton.setText("Start");
+//        }else{
+//            speedList.clear();
+//            checkPermission();
+//            locationManager.requestLocationUpdates(
+//                    LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+//            isMonitoring=true;
+//            monitoringButton.setText("Stop");
+//        }
+//    }
 
     @SuppressLint("MissingPermission")
 
