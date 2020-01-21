@@ -5,6 +5,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -16,29 +17,53 @@ public class MyLocationListener implements LocationListener  {
     AtomicBoolean isUpdated;
     AtomicBoolean isMonitoring;
 
-    Location[] locations;
-
+    MyPath andata;
+    Location end = null;
 
 
     MyLocationListener(MySpeedList list,AtomicBoolean atomBoolUpd,AtomicBoolean atomBoolMon){
         speedList=list;
         isUpdated=atomBoolUpd;
         isMonitoring=atomBoolMon;
+
+        Location[]auxArray = new Location[3];
+        Location aux= new Location("");
+        aux.setLongitude(8.908138);
+        aux.setLatitude(44.411093);
+        auxArray[0]=aux;
+        Location aux2= new Location("");
+        aux2.setLongitude(8.911964);
+        aux2.setLatitude(44.413459);
+        auxArray[1]=aux2;
+        Location aux3= new Location("");
+        aux3.setLongitude(8.928115);
+        aux3.setLatitude(44.408726);
+        auxArray[2]=aux3;
+
+        andata= new MyPath(auxArray, 60);
+
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Location start= new Location("");
-        start.setLongitude(8.908138);
-        start.setLatitude(44.411093);
-        Log.d(TAG,Float.toString(start.distanceTo(location)));
+
         if(!isMonitoring.get()){
-            if(start.distanceTo(location)<20){
+            if(andata.getStart().distanceTo(location)<20){
                 Log.d(TAG,"start monitoring");
                 isMonitoring.set(true);
+                end = andata.getNext();
+                if(end==null){
+                    Log.d(TAG,"FINITO");
+                    isMonitoring.set(false);
+                }
             }
         }
         if(isMonitoring.get()) {
+            Log.d(TAG,String.valueOf(end.distanceTo(location)));
+            if(end.distanceTo(location)<20){
+                andata.setAvgSpeed(speedList.getAverageSpeed());
+                isMonitoring.set(false);
+            }
             speedList.add(location.getSpeed() * 3.6F);
             isUpdated.set(true);
         }
