@@ -27,17 +27,29 @@ public class MyLocationListener implements LocationListener  {
         isMonitoring=atomBoolMon;
 
         Location[]auxArray = new Location[3];
+//        Location aux= new Location("");
+//        aux.setLongitude(8.908138);
+//        aux.setLatitude(44.411093);
+//        auxArray[0]=aux;
+//        Location aux2= new Location("");
+//        aux2.setLongitude(8.911964);
+//        aux2.setLatitude(44.413459);
+//        auxArray[1]=aux2;
+//        Location aux3= new Location("");
+//        aux3.setLongitude(8.928115);
+//        aux3.setLatitude(44.408726);
+//        auxArray[2]=aux3;
         Location aux= new Location("");
-        aux.setLongitude(8.908138);
-        aux.setLatitude(44.411093);
+        aux.setLongitude(8.888282);
+        aux.setLatitude(44.410338);
         auxArray[0]=aux;
         Location aux2= new Location("");
-        aux2.setLongitude(8.911964);
-        aux2.setLatitude(44.413459);
+        aux2.setLongitude(8.888710);
+        aux2.setLatitude(44.410240);
         auxArray[1]=aux2;
         Location aux3= new Location("");
-        aux3.setLongitude(8.928115);
-        aux3.setLatitude(44.408726);
+        aux3.setLongitude(8.889450);
+        aux3.setLatitude(44.410021);
         auxArray[2]=aux3;
 
         andata= new MyPath(auxArray, 60);
@@ -51,18 +63,23 @@ public class MyLocationListener implements LocationListener  {
             if(andata.getStart().distanceTo(location)<20){
                 Log.d(TAG,"start monitoring");
                 isMonitoring.set(true);
-                end = andata.getNext();
-                if(end==null){
-                    Log.d(TAG,"FINITO");
-                    isMonitoring.set(false);
-                }
+
             }
         }
         if(isMonitoring.get()) {
-            Log.d(TAG,String.valueOf(end.distanceTo(location)));
-            if(end.distanceTo(location)<20){
-                andata.setAvgSpeed(speedList.getAverageSpeed());
+            if(andata.getEnd().distanceTo(location)<20){
                 isMonitoring.set(false);
+                andata.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
+                speedList.clear();
+                Log.d(TAG,"finito");
+                return;
+            }
+            Log.d(TAG,String.valueOf(andata.getNextCheckpoint().distanceTo(location)));
+            if(andata.getNextCheckpoint().distanceTo(location)<20){
+
+                andata.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
+                speedList.clear();
+                Log.d(TAG,"check");
             }
             speedList.add(location.getSpeed() * 3.6F);
             isUpdated.set(true);
