@@ -9,33 +9,72 @@
     tools:showIn="@layout/activity_main">
 
     <TextView
-        android:id="@+id/avgSpeedView"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="km/h"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/instantSpeedView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.777" />
+
+    <TextView
+        android:id="@+id/avgSpeedView"
+        android:layout_width="173dp"
+        android:layout_height="82dp"
+        android:fontFamily="sans-serif-medium"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:text="60.00"
+        android:textColor="@android:color/black"
+        android:textSize="60sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.178" />
 
     <TextView
         android:id="@+id/instantSpeedView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="55.00"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avgSpeedView" />
+        app:layout_constraintTop_toBottomOf="@+id/avgSpeedView"
+        app:layout_constraintVertical_bias="0.674" />
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="monitoringButton"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/avgSpeedView"
+        android:text="km/h"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/avgSpeedView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="280dp"
+        android:layout_height="207dp"
+        android:gravity="center_horizontal"
+        android:text="Tratto1 : 55.02 km/h"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/instantSpeedView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/avgSpeedView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

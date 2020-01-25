@@ -27,7 +27,7 @@ public class MyLogicTask extends AsyncTask<Integer, Float, Integer> {
         Log.d(TAG,"start task");
         while(true){
             if(isUpdated.compareAndSet(true,false)){
-                publishProgress(speedList.getAverageSpeed(),speedList.getLast());
+                    publishProgress(speedList.getAverageSpeed(),speedList.getLast());
             }
         }
     }

@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         avgSpeedView = findViewById(R.id.avgSpeedView);
         instantSpeedView= findViewById(R.id.instantSpeedView);
-        monitoringButton=findViewById(R.id.button);
 
         speedList=new MySpeedList();
         isUpdated= new AtomicBoolean(false);     //maybe better in MySpeedList
@@ -94,20 +93,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    public void monitoringButton(View v){
-//        if (isMonitoring){
-//            isMonitoring=false;
-//            locationManager.removeUpdates(locationListener);
-//            monitoringButton.setText("Start");
-//        }else{
-//            speedList.clear();
-//            checkPermission();
-//            locationManager.requestLocationUpdates(
-//                    LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
-//            isMonitoring=true;
-//            monitoringButton.setText("Stop");
-//        }
-//    }
 
     @SuppressLint("MissingPermission")
 
