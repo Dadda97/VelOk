@@ -3,6 +3,7 @@ package com.example.velocok_beta;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -23,6 +25,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
     TextView avgSpeedView;
     TextView instantSpeedView;
     Button monitoringButton;
+    Switch theme;
+
+    SharedPreferences mPreferences;
+    SharedPreferences.Editor preferencesEditor;
+    int mDayLight;
 
     LocationManager locationManager;
     LocationListener locationListener;
@@ -57,6 +66,31 @@ public class MainActivity extends AppCompatActivity {
 
         avgSpeedView = findViewById(R.id.avgSpeedView);
         instantSpeedView= findViewById(R.id.instantSpeedView);
+        theme = findViewById(R.id.lightAndDark);
+
+        mPreferences = getSharedPreferences("com.velocok", MODE_PRIVATE);
+        preferencesEditor = mPreferences.edit();
+        mDayLight = mPreferences.getInt("theme", AppCompatDelegate.MODE_NIGHT_NO);
+        if (mDayLight == AppCompatDelegate.MODE_NIGHT_YES) {
+            theme.setChecked(true);
+            AppCompatDelegate.setDefaultNightMode(mDayLight);
+        }
+        theme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (mDayLight == AppCompatDelegate.MODE_NIGHT_NO) {
+                    mDayLight = AppCompatDelegate.MODE_NIGHT_YES;
+                    preferencesEditor.putInt("theme", AppCompatDelegate.MODE_NIGHT_YES);
+                } else {
+                    mDayLight = AppCompatDelegate.MODE_NIGHT_NO;
+                    preferencesEditor.putInt("theme", AppCompatDelegate.MODE_NIGHT_NO);
+                }
+                AppCompatDelegate.setDefaultNightMode(mDayLight);
+                getDelegate().applyDayNight();
+                preferencesEditor.apply();
+
+            }
+        });
 
         speedList=new MySpeedList();
         isUpdated= new AtomicBoolean(false);     //maybe better in MySpeedList
