@@ -13,12 +13,15 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -49,6 +52,43 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor preferencesEditor;
     int mDayLight;
 
+    TextWatcher myTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (Double.parseDouble(s.toString()) > 60) {
+                avgSpeedView.setTextColor(getResources().getColor(R.color.colorAccent));
+            } else {
+                avgSpeedView.setTextColor(getResources().getColor(R.color.black));
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    CompoundButton.OnCheckedChangeListener mySwitchListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (mDayLight == AppCompatDelegate.MODE_NIGHT_NO) {
+                mDayLight = AppCompatDelegate.MODE_NIGHT_YES;
+                preferencesEditor.putInt("theme", AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                mDayLight = AppCompatDelegate.MODE_NIGHT_NO;
+                preferencesEditor.putInt("theme", AppCompatDelegate.MODE_NIGHT_NO);
+            }
+            AppCompatDelegate.setDefaultNightMode(mDayLight);
+            getDelegate().applyDayNight();
+            preferencesEditor.apply();
+        }
+    };
+
     LocationManager locationManager;
     LocationListener locationListener;
 
@@ -75,22 +115,9 @@ public class MainActivity extends AppCompatActivity {
             theme.setChecked(true);
             AppCompatDelegate.setDefaultNightMode(mDayLight);
         }
-        theme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (mDayLight == AppCompatDelegate.MODE_NIGHT_NO) {
-                    mDayLight = AppCompatDelegate.MODE_NIGHT_YES;
-                    preferencesEditor.putInt("theme", AppCompatDelegate.MODE_NIGHT_YES);
-                } else {
-                    mDayLight = AppCompatDelegate.MODE_NIGHT_NO;
-                    preferencesEditor.putInt("theme", AppCompatDelegate.MODE_NIGHT_NO);
-                }
-                AppCompatDelegate.setDefaultNightMode(mDayLight);
-                getDelegate().applyDayNight();
-                preferencesEditor.apply();
+        theme.setOnCheckedChangeListener(mySwitchListener);
 
-            }
-        });
+
 
         speedList=new MySpeedList();
         isUpdated= new AtomicBoolean(false);     //maybe better in MySpeedList
@@ -102,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
 
         avgSpeedView.setText("waiting...");
         instantSpeedView.setText("waiting...");
+
+        avgSpeedView.addTextChangedListener(myTextWatcher);
 
         checkPermission();
 
