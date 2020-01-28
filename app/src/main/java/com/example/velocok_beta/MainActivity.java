@@ -13,7 +13,6 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -37,7 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity" ;
+    private static final String TAG = "MainActivity";
 
     AtomicBoolean isUpdated;
     MySpeedList speedList;
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     int mDayLight;
 
     TextWatcher myTextWatcher = new TextWatcher() {
+
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -60,10 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (Double.parseDouble(s.toString()) > 60) {
-                avgSpeedView.setTextColor(getResources().getColor(R.color.colorAccent));
+            if (s.getClass().equals(Double.class) && Double.parseDouble(s.toString()) > 60) {
+                //avgSpeedView.setTextColor(getResources().getColor(R.color.colorAccent));
+                avgSpeedView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             } else {
-                avgSpeedView.setTextColor(getResources().getColor(R.color.black));
+                //avgSpeedView.setTextColor(getResources().getColor(R.color.black));
+                avgSpeedView.setBackgroundColor(0);
             }
         }
 
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {
 
         }
+
     };
 
     CompoundButton.OnCheckedChangeListener mySwitchListener = new CompoundButton.OnCheckedChangeListener() {
@@ -83,9 +86,11 @@ public class MainActivity extends AppCompatActivity {
                 mDayLight = AppCompatDelegate.MODE_NIGHT_NO;
                 preferencesEditor.putInt("theme", AppCompatDelegate.MODE_NIGHT_NO);
             }
-            AppCompatDelegate.setDefaultNightMode(mDayLight);
-            getDelegate().applyDayNight();
+            //AppCompatDelegate.setDefaultNightMode(mDayLight);
+            //getDelegate().applyDayNight();
             preferencesEditor.apply();
+            recreate();
+
         }
     };
 
@@ -99,48 +104,45 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mPreferences = getSharedPreferences("com.example.velocok", MODE_PRIVATE);
+        preferencesEditor = mPreferences.edit();
+        mDayLight = mPreferences.getInt("theme", AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(mDayLight);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         avgSpeedView = findViewById(R.id.avgSpeedView);
-        instantSpeedView= findViewById(R.id.instantSpeedView);
-        theme = findViewById(R.id.lightAndDark);
+        instantSpeedView = findViewById(R.id.instantSpeedView);
 
-        mPreferences = getSharedPreferences("com.velocok", MODE_PRIVATE);
-        preferencesEditor = mPreferences.edit();
-        mDayLight = mPreferences.getInt("theme", AppCompatDelegate.MODE_NIGHT_NO);
+
+        theme = findViewById(R.id.lightAndDark);
         if (mDayLight == AppCompatDelegate.MODE_NIGHT_YES) {
             theme.setChecked(true);
-            AppCompatDelegate.setDefaultNightMode(mDayLight);
         }
         theme.setOnCheckedChangeListener(mySwitchListener);
 
 
-
-        speedList=new MySpeedList();
-        isUpdated= new AtomicBoolean(false);     //maybe better in MySpeedList
+        speedList = new MySpeedList();
+        isUpdated = new AtomicBoolean(false);     //maybe better in MySpeedList
         isMonitoring = new AtomicBoolean(false);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener(speedList,isUpdated,isMonitoring);
+        locationListener = new MyLocationListener(speedList, isUpdated, isMonitoring);
 
-
-        avgSpeedView.setText("waiting...");
-        instantSpeedView.setText("waiting...");
 
         avgSpeedView.addTextChangedListener(myTextWatcher);
 
         checkPermission();
 
         locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+                LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
 
-        myLogicTask =new MyLogicTask(speedList,isUpdated,avgSpeedView,instantSpeedView);
+        myLogicTask = new MyLogicTask(speedList, isUpdated, avgSpeedView, instantSpeedView);
 
         myLogicTask.execute();
-
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -168,10 +170,10 @@ public class MainActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                  //TODO add execute of mycore
+                    //TODO add execute of mycore
 
                 } else {
-                    Toast toast= Toast.makeText(this, "The app cannot work without GPS permission",Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(this, "The app cannot work without GPS permission", Toast.LENGTH_LONG);
 
                 }
                 return;
@@ -182,12 +184,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkPermission(){
-        if (ContextCompat.checkSelfPermission( this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG,"no permissions");
+    private void checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "no permissions");
 
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1
             );
 
             return;
