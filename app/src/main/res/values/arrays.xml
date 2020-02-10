@@ -1,0 +1,14 @@
+<resources>
+    <!-- DarkMode Preference -->
+    <string-array name="darkmode_entries">
+        <item>On</item>
+        <item>Off</item>
+        <item>Default</item>
+    </string-array>
+
+    <string-array name="darkmode_values">
+        <item>2</item>
+        <item>1</item>
+        <item>3</item>
+    </string-array>
+</resources>
