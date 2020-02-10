@@ -3,26 +3,26 @@ package com.example.velocok_beta;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
-
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     TextView avgSpeedView;
     TextView instantSpeedView;
     Button monitoringButton;
-    Switch theme;
 
     SharedPreferences mPreferences;
     SharedPreferences.Editor preferencesEditor;
@@ -61,8 +60,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (s.getClass().equals(Double.class) && Double.parseDouble(s.toString()) > 60) {
-                //avgSpeedView.setTextColor(getResources().getColor(R.color.colorAccent));
+                // FIXME Backgroud color not changed in night mode
                 avgSpeedView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                // FIXME Notification sound not played
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                r.play();
             } else {
                 //avgSpeedView.setTextColor(getResources().getColor(R.color.black));
                 avgSpeedView.setBackgroundColor(0);
@@ -76,24 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-    CompoundButton.OnCheckedChangeListener mySwitchListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (mDayLight == AppCompatDelegate.MODE_NIGHT_NO) {
-                mDayLight = AppCompatDelegate.MODE_NIGHT_YES;
-                preferencesEditor.putInt("theme", AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                mDayLight = AppCompatDelegate.MODE_NIGHT_NO;
-                preferencesEditor.putInt("theme", AppCompatDelegate.MODE_NIGHT_NO);
-            }
-            //AppCompatDelegate.setDefaultNightMode(mDayLight);
-            //getDelegate().applyDayNight();
-            preferencesEditor.apply();
-            recreate();
-
-        }
-    };
-
     LocationManager locationManager;
     LocationListener locationListener;
 
@@ -104,9 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mPreferences = getSharedPreferences("com.example.velocok", MODE_PRIVATE);
-        preferencesEditor = mPreferences.edit();
-        mDayLight = mPreferences.getInt("theme", AppCompatDelegate.MODE_NIGHT_NO);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mDayLight = Integer.parseInt(mPreferences.getString("darkmode_preference", "0"));
         AppCompatDelegate.setDefaultNightMode(mDayLight);
 
         super.onCreate(savedInstanceState);
@@ -117,12 +101,6 @@ public class MainActivity extends AppCompatActivity {
         avgSpeedView = findViewById(R.id.avgSpeedView);
         instantSpeedView = findViewById(R.id.instantSpeedView);
 
-
-        theme = findViewById(R.id.lightAndDark);
-        if (mDayLight == AppCompatDelegate.MODE_NIGHT_YES) {
-            theme.setChecked(true);
-        }
-        theme.setOnCheckedChangeListener(mySwitchListener);
 
 
         speedList = new MySpeedList();
@@ -148,14 +126,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
 
@@ -212,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
