@@ -29,4 +29,19 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="Sound">
+
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="speed_notification"
+            android:title="Sound on over speed" />
+        <EditTextPreference
+            android:defaultValue="3"
+            android:key="threshold_sound"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Number of sounds" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

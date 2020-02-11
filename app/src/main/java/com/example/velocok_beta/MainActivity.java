@@ -27,8 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +45,23 @@ public class MainActivity extends AppCompatActivity {
     Button monitoringButton;
 
     SharedPreferences mPreferences;
-    SharedPreferences.Editor preferencesEditor;
     int mDayLight;
+
+
+    boolean overSpeed_notification_loop = false;
+    boolean isOverSpeed_notification_enabled;
+    int THRESHOLD;
+    Thread speed_notification;
+
+    private void alarmFunction() {
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+        for (int alarm = 0; alarm < THRESHOLD; alarm++) {
+            r.play();
+            while(r.isPlaying()){}
+        }
+
+    }
 
     TextWatcher myTextWatcher = new TextWatcher() {
 
@@ -59,16 +72,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (s.getClass().equals(Double.class) && Double.parseDouble(s.toString()) > 60) {
-                // FIXME Backgroud color not changed in night mode
-                avgSpeedView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                // FIXME Notification sound not played
-                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                r.play();
-            } else {
-                //avgSpeedView.setTextColor(getResources().getColor(R.color.black));
-                avgSpeedView.setBackgroundColor(0);
+            if (!s.equals(getString(R.string.waiting_str))) {
+                if (Double.parseDouble(s.toString()) > 60) {
+                    avgSpeedView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    if (!overSpeed_notification_loop && isOverSpeed_notification_enabled) {
+                        overSpeed_notification_loop = true;
+                        speed_notification.start();
+                    }
+                } else {
+                    //avgSpeedView.setTextColor(getResources().getColor(R.color.black));
+                    avgSpeedView.setBackgroundColor(0);
+                    // TODO if sound is playing stop it
+                    overSpeed_notification_loop = false;
+                   // if (r.isPlaying()) { r.stop(); }
+                }
             }
         }
 
@@ -91,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mDayLight = Integer.parseInt(mPreferences.getString("darkmode_preference", "0"));
+        isOverSpeed_notification_enabled = mPreferences.getBoolean("speed_notification", true);
+        THRESHOLD = Integer.parseInt(mPreferences.getString("threshold_sound", "3"));
         AppCompatDelegate.setDefaultNightMode(mDayLight);
 
         super.onCreate(savedInstanceState);
@@ -101,7 +120,17 @@ public class MainActivity extends AppCompatActivity {
         avgSpeedView = findViewById(R.id.avgSpeedView);
         instantSpeedView = findViewById(R.id.instantSpeedView);
 
-
+        speed_notification =  new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                for (int alarm = 0; alarm < THRESHOLD; alarm++) {
+                    r.play();
+                    while(r.isPlaying()){}
+                }
+            }
+        });
 
         speedList = new MySpeedList();
         isUpdated = new AtomicBoolean(false);     //maybe better in MySpeedList
