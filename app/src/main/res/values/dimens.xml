@@ -1,3 +1,4 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <item name="newsHeight" type="dimen">25%</item>
 </resources>
