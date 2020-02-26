@@ -26,6 +26,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private LinearLayout newsParent;
     private int numberOfNews;
     MyNewsProvider newsProvider;
+    private LinearLayout weatherParent;
+    private int numberOfForecast;
+    MyWeatherProvider weatherProvider;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,25 @@ public class WelcomeActivity extends AppCompatActivity {
             image.setContentDescription(newsProvider.getNewsTitle(i));
             Picasso.get().load(newsProvider.getNewsImagesURL(i)).resize(500, 500)
               .centerCrop().into(image);
+        }
+        weatherParent = findViewById(R.id.weatherParent);
+        numberOfForecast =  weatherParent.getChildCount();     //number of weather defined by XML
+        Log.d(TAG,String.valueOf(numberOfForecast));
+        weatherProvider = new MyWeatherProvider(numberOfForecast);
+        for (int i = 0; i< numberOfForecast;i++){
+
+            LinearLayout forecast= (LinearLayout) weatherParent.getChildAt(i);
+
+            TextView hour = (TextView) forecast.getChildAt(0);
+            hour.setText(weatherProvider.getWeatherTime(i));
+
+            ImageView image= (ImageView) forecast.getChildAt(1);
+            image.setContentDescription(weatherProvider.getWeatherIconURL(i));
+            Picasso.get().load(weatherProvider.getWeatherIconURL(i)).resize(500, 500)
+                    .centerCrop().into(image);
+
+            TextView temp = (TextView) forecast.getChildAt(2);
+            temp.setText(weatherProvider.getWeatherTemp(i));
         }
 
     }
