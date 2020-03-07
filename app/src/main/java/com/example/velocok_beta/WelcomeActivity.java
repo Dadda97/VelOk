@@ -39,7 +39,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         newsParent = findViewById(R.id.newsParent);
         numberOfNews =  newsParent.getChildCount();     //number of news defined by XML
-        Log.d(TAG,String.valueOf(numberOfNews));
 
         newsProvider = new MyNewsProvider(numberOfNews);
 
@@ -59,7 +58,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         weatherParent = findViewById(R.id.weatherParent);
         numberOfForecast =  weatherParent.getChildCount();     //number of weather defined by XML
-        Log.d(TAG,String.valueOf(numberOfForecast));
+
         weatherProvider = new MyWeatherProvider(numberOfForecast);
         for (int i = 0; i< numberOfForecast;i++){
 

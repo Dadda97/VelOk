@@ -29,6 +29,7 @@
         android:id="@+id/weatherParent"
         android:layout_width="320dp"
         android:layout_height="90dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,7 +50,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
 
             <ImageView
@@ -64,7 +64,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
 
         </LinearLayout>
@@ -82,7 +81,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
 
             <ImageView
@@ -97,7 +95,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
 
         </LinearLayout>
@@ -115,7 +112,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
 
             <ImageView
@@ -130,7 +126,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -147,7 +142,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
 
             <ImageView
@@ -162,7 +156,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -179,7 +172,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
 
             <ImageView
@@ -194,7 +186,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
-                android:text="TextView"
                 android:textAlignment="center" />
         </LinearLayout>
 
