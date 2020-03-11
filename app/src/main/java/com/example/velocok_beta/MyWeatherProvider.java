@@ -70,7 +70,6 @@ public class MyWeatherProvider {
                     int unixTime =forecast.getInt("dt")+3600;
                     SimpleDateFormat df =new SimpleDateFormat("HH:mm");
                     times[i] = df.format(new Date(unixTime*1000L));
-                    Log.d(TAG,times[i]);
                     icons[i] = ICONURL.concat(((JSONObject)(forecast.getJSONArray("weather").get(0))).getString("icon")).concat("@2x.png");
                     temps[i] = (forecast.getJSONObject("main").getString("temp")).concat("°C");
                 }

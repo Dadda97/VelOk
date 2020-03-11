@@ -5,38 +5,81 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.velocok_beta.MyNewsProvider;
 import com.squareup.picasso.Picasso;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.URL;
 
 public class WelcomeActivity extends AppCompatActivity {
     private final String TAG="Welcome Activity";
+    //////////////////FOR Weather & News//////////////////
     private LinearLayout newsParent;
     private int numberOfNews;
     MyNewsProvider newsProvider;
     private LinearLayout weatherParent;
     private int numberOfForecast;
     MyWeatherProvider weatherProvider;
+    //////////////////FOR GPS & location//////////////////
+    LocationManager locationManager;
+    LocationListener locationListener;
+    int gpsInterval = 5000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        checkPermission();
+
+        initNews();
+
+        initWeather();
+
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new MyLazyLocationListener(this);
+
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        checkPermission();
+
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        locationManager.removeUpdates(locationListener);
+    }
+
+    public void initNews(){
+        Log.d(TAG,"STARTING Init News....");
         newsParent = findViewById(R.id.newsParent);
         numberOfNews =  newsParent.getChildCount();     //number of news defined by XML
 
@@ -54,8 +97,21 @@ public class WelcomeActivity extends AppCompatActivity {
             ImageView image= (ImageView) news.getChildAt(1);
             image.setContentDescription(newsProvider.getNewsTitle(i));
             Picasso.get().load(newsProvider.getNewsImagesURL(i)).resize(500, 500)
-              .centerCrop().into(image);
+                    .centerCrop().into(image);
         }
+        Log.d(TAG,"FINISHED Init News....");
+
+    }
+
+    public void openNewsBody(View v){
+        AlertDialog.Builder ad = new AlertDialog.Builder(this);
+        int newsId = Integer.parseInt((String)v.getTag());
+        ad.setTitle(newsProvider.getNewsTitle(newsId));
+        ad.setMessage(newsProvider.getNewsBody(newsId));
+        ad.show();
+    }
+    public void initWeather(){
+        Log.d(TAG,"STARTING Init Weather....");
         weatherParent = findViewById(R.id.weatherParent);
         numberOfForecast =  weatherParent.getChildCount();     //number of weather defined by XML
 
@@ -75,17 +131,8 @@ public class WelcomeActivity extends AppCompatActivity {
             TextView temp = (TextView) forecast.getChildAt(2);
             temp.setText(weatherProvider.getWeatherTemp(i));
         }
-
+        Log.d(TAG,"FINISHED Init Weather....");
     }
-
-   public void openNewsBody(View v){
-       AlertDialog.Builder ad = new AlertDialog.Builder(this);
-       int newsId = Integer.parseInt((String)v.getTag());
-       ad.setTitle(newsProvider.getNewsTitle(newsId));
-       ad.setMessage(newsProvider.getNewsBody(newsId));
-       ad.show();
-   }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
