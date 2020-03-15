@@ -1,6 +1,12 @@
 package com.example.velocok_beta;
 
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,24 +22,26 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MyWeatherProvider {
+public class MyWeatherProvider extends AsyncTask<Void,Void,Void> {
 
     private static  final String TAG = "MyWeatherProvider";
     private static  final String STARTURL="http://api.openweathermap.org/data/2.5/forecast?q=genoa&units=metric&appId=";
     private static  final String ICONURL="http://openweathermap.org/img/wn/";
-    private int numberOfIcons;
+    private int numberOfForecast;
     private String[] icons =  null;
     private String[] temps = null;
     private String[] times= null;
+    private LinearLayout weatherParent;
+
+    public MyWeatherProvider(LinearLayout parent){
+        weatherParent = parent;
+        numberOfForecast=  weatherParent.getChildCount();     //number of weather defined by XML
+
+        icons = new String[numberOfForecast];
+        temps = new String[numberOfForecast];
+        times = new String[numberOfForecast];
 
 
-    public MyWeatherProvider(int num){
-        numberOfIcons = num;
-        icons = new String[numberOfIcons];
-        temps = new String[numberOfIcons];
-        times = new String[numberOfIcons];
-
-        getWeatherFromApi();
 
     }
 
@@ -65,7 +73,7 @@ public class MyWeatherProvider {
                 JSONArray JsonForecasts =(json.getJSONArray("list"));
                 Log.d(TAG,JsonForecasts.toString());
 
-                for (int i = 0; i < numberOfIcons; i++) {
+                for (int i = 0; i < numberOfForecast; i++) {
                     JSONObject forecast=(JSONObject)JsonForecasts.get(i);
                     int unixTime =forecast.getInt("dt")+3600;
                     SimpleDateFormat df =new SimpleDateFormat("HH:mm");
@@ -91,5 +99,31 @@ public class MyWeatherProvider {
             sb.append((char) cp);
         }
         return sb.toString();
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+        getWeatherFromApi();
+        return null;
+    }
+    @Override
+    protected void onPostExecute(Void v) {
+        for (int i = 0; i< numberOfForecast;i++){
+
+            LinearLayout forecast= (LinearLayout) weatherParent.getChildAt(i);
+
+            TextView hour = (TextView) forecast.getChildAt(0);
+            hour.setText(this.getWeatherTime(i));
+
+            ImageView image= (ImageView) forecast.getChildAt(1);
+            image.setContentDescription(this.getWeatherIconURL(i));
+            Picasso.get().load(this.getWeatherIconURL(i)).resize(500, 500)
+                    .centerCrop().into(image);
+
+            TextView temp = (TextView) forecast.getChildAt(2);
+            temp.setText(this.getWeatherTemp(i));
+        }
+        Log.d(TAG,"FINISHED Init Weather....");
+
     }
 }

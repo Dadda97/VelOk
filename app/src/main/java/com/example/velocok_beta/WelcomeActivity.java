@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.squareup.picasso.Picasso;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -17,9 +15,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -42,7 +38,6 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -54,11 +49,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
         initWeather();
 
-
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLazyLocationListener(this);
-
-
     }
 
     @Override
@@ -78,29 +70,15 @@ public class WelcomeActivity extends AppCompatActivity {
         locationManager.removeUpdates(locationListener);
     }
 
+
+
     public void initNews(){
         Log.d(TAG,"STARTING Init News....");
         newsParent = findViewById(R.id.newsParent);
         numberOfNews =  newsParent.getChildCount();     //number of news defined by XML
 
-        newsProvider = new MyNewsProvider(numberOfNews);
-
-        Picasso.get().setLoggingEnabled(true);
-
-        for (int i = 0; i< numberOfNews;i++){
-
-            LinearLayout news= (LinearLayout) newsParent.getChildAt(i);
-
-            TextView text= (TextView) news.getChildAt(0);
-            text.setText(newsProvider.getNewsTitle(i));
-
-            ImageView image= (ImageView) news.getChildAt(1);
-            image.setContentDescription(newsProvider.getNewsTitle(i));
-            Picasso.get().load(newsProvider.getNewsImagesURL(i)).resize(500, 500)
-                    .centerCrop().into(image);
-        }
-        Log.d(TAG,"FINISHED Init News....");
-
+        newsProvider = new MyNewsProvider(newsParent);
+        newsProvider.execute();
     }
 
     public void openNewsBody(View v){
@@ -113,26 +91,12 @@ public class WelcomeActivity extends AppCompatActivity {
     public void initWeather(){
         Log.d(TAG,"STARTING Init Weather....");
         weatherParent = findViewById(R.id.weatherParent);
-        numberOfForecast =  weatherParent.getChildCount();     //number of weather defined by XML
 
-        weatherProvider = new MyWeatherProvider(numberOfForecast);
-        for (int i = 0; i< numberOfForecast;i++){
-
-            LinearLayout forecast= (LinearLayout) weatherParent.getChildAt(i);
-
-            TextView hour = (TextView) forecast.getChildAt(0);
-            hour.setText(weatherProvider.getWeatherTime(i));
-
-            ImageView image= (ImageView) forecast.getChildAt(1);
-            image.setContentDescription(weatherProvider.getWeatherIconURL(i));
-            Picasso.get().load(weatherProvider.getWeatherIconURL(i)).resize(500, 500)
-                    .centerCrop().into(image);
-
-            TextView temp = (TextView) forecast.getChildAt(2);
-            temp.setText(weatherProvider.getWeatherTemp(i));
-        }
-        Log.d(TAG,"FINISHED Init Weather....");
+        weatherProvider = new MyWeatherProvider(weatherParent);
+        weatherProvider.execute();
     }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {

@@ -1,7 +1,14 @@
 package com.example.velocok_beta;
 
 import android.media.Image;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,20 +25,24 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MyNewsProvider {
+public class MyNewsProvider extends AsyncTask<Void,Void,Void> {
     private static  final String TAG = "MyNewsProvider";
     private static  final String STARTURL="https://newsapi.org/v2/everything?language=it&sortby=relevancy&domains=ansa.it&from=";
     private int numberOfNews;
     private String[] titles =  null;
     private String[] bodies = null;
     private String[] images = null;
+    private LinearLayout newsParent;
 
-    public MyNewsProvider(int num){
-        numberOfNews = num;
+    public MyNewsProvider(LinearLayout parent){
+        newsParent= parent;
+        numberOfNews =  newsParent.getChildCount();
+
         titles = new String[numberOfNews];
         images = new String[numberOfNews];
         bodies = new String[numberOfNews];
-        getNewsFromApi();
+
+
 
     }
 
@@ -89,5 +100,29 @@ public class MyNewsProvider {
             sb.append((char) cp);
         }
         return sb.toString();
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+        getNewsFromApi();
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void v) {
+        Picasso.get().setLoggingEnabled(true);
+        for (int i = 0; i< numberOfNews;i++){
+
+            LinearLayout news= (LinearLayout) newsParent.getChildAt(i);
+
+            TextView text= (TextView) news.getChildAt(0);
+            text.setText(this.getNewsTitle(i));
+
+            ImageView image= (ImageView) news.getChildAt(1);
+            image.setContentDescription(this.getNewsTitle(i));
+            Picasso.get().load(this.getNewsImagesURL(i)).resize(500, 500)
+                    .centerCrop().into(image);
+        }
+        Log.d(TAG,"FINISHED Init News....");
     }
 }
