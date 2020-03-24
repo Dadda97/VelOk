@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 public class MyPath implements Parcelable {
     private static final String TAG = "MyPath";
@@ -17,6 +18,7 @@ public class MyPath implements Parcelable {
     private String name;
     private int i=1;
     private float[] speedArray;
+    DecimalFormat df = new DecimalFormat("#.00");
 
     MyPath(Location[] positions, double speed, String pathName){
         if (positions.length<2){throw new IllegalArgumentException();}
@@ -69,9 +71,23 @@ public class MyPath implements Parcelable {
     }
 
     public void setAvgSpeedOfCheckpoint(float avg){
+        Log.d(TAG, String.valueOf(avg));
         speedArray[i-1]=avg;
         i++;
     }
+    public String getSectorsMessage(){
+        String message = new String();
+        int countSector=1;
+        for(float avg : speedArray){
+            Log.d(TAG,String.valueOf(avg));
+            if(avg>0) {
+                message = message.concat("Settore ".concat(Integer.toString(countSector++)).concat(": ").concat(df.format(avg)).concat(" km/h\n"));
+            }
+        }
+        Log.d(TAG, message);
+        return message;
+    }
+
     public float[] getAvgArray(){
         i=1;
         return speedArray;
@@ -90,4 +106,5 @@ public class MyPath implements Parcelable {
         dest.writeString(name);
 
     }
+
 }

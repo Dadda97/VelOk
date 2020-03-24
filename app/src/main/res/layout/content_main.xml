@@ -66,11 +66,10 @@
         app:layout_constraintVertical_bias="0.233" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/sectorsView"
         android:layout_width="280dp"
         android:layout_height="207dp"
         android:gravity="center_horizontal"
-        android:text="@string/defaultPaths"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/instantSpeedView"
         app:layout_constraintEnd_toEndOf="parent"

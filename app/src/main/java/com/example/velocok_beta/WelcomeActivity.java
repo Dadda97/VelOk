@@ -7,6 +7,8 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,6 +17,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -51,6 +54,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLazyLocationListener(this);
+
+        checkGPS();
     }
 
     @Override
@@ -60,17 +65,36 @@ public class WelcomeActivity extends AppCompatActivity {
 
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
-
-
+        Log.d(TAG,"LazyLocation REGISTERED");
     }
 
     @Override
     public void onPause(){
         super.onPause();
         locationManager.removeUpdates(locationListener);
+        Log.d(TAG,"LazyLocation REMOVED");
     }
 
+public void checkGPS(){
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            AlertDialog.Builder ad = new AlertDialog.Builder(this);
 
+            ad.setTitle("Richiesto GPS");
+            ad.setMessage("Per il corretto funzionamento dell'app, è richiesta l'attivazione del proprio GPS.");
+            ad.setPositiveButton("Attiva",  new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    Intent gpsOptionsIntent = new Intent(
+                            android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(gpsOptionsIntent);
+                }
+            });
+            ad.setNegativeButton("Annulla", null);
+
+            ad.show();
+
+
+        }
+}
 
     public void initNews(){
         Log.d(TAG,"STARTING Init News....");
