@@ -3,8 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="km_h">km/h</string>
     <string name="waiting_str">waiting…</string>
-    <string name="defaultAvgSpeed">60.00</string>
-    <string name="defaultInstantSpeed">55.00</string>
+    <string name="defaultAvgSpeed">--.--</string>
+    <string name="defaultInstantSpeed">--.--</string>
     <string name="defaultPaths">Tratto1 : 55.02 km/h</string>
     <string name="dark_theme">Dark Theme</string>
 </resources>

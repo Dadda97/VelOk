@@ -31,7 +31,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
     MyPath path;
     TextView avgSpeed;
     TextView instSpeed;
-    TextView secotorsView;
+    TextView sectorsView;
     DecimalFormat df = new DecimalFormat("#.00");
     Activity mainActivity;
     Context mainContext;
@@ -47,7 +47,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
         mainActivity.setContentView(R.layout.activity_main);
         avgSpeed= mainActivity.findViewById(R.id.avgSpeedView);
         instSpeed= mainActivity.findViewById(R.id.instantSpeedView);
-        secotorsView =mainActivity.findViewById(R.id.sectorsView);
+        sectorsView =mainActivity.findViewById(R.id.sectorsView);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
                 Log.d(TAG,"CHECKPOINT");
                 path.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
 
-                secotorsView.setText(path.getSectorsMessage());
+                sectorsView.setText(path.getSectorsMessage());
 
                 speedList.clear();
             }
@@ -100,7 +100,9 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
         ad.setTitle(Html.fromHtml("<font color='#FF7F27'>This is a test</font>"));
         ad.setMessage(path.getSectorsMessage());
         ad.create();
-
+        MyDatabase DB = new MyDatabase(mainContext);
+        DB.insert(path);
+        DB.getAll();
         final AlertDialog closingDialog= ad.create();
         closingDialog.show();
 
