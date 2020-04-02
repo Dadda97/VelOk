@@ -1,87 +1,76 @@
 package com.example.velocok_beta;
 
+import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-public class MyLocationListener implements LocationListener  {
+public class MyLocationListener extends AppCompatActivity implements LocationListener   {
 
     private static final String TAG = "MyLocationListener ";
 
     private MySpeedList speedList;
     AtomicBoolean isUpdated;
     AtomicBoolean isMonitoring;
+    MyPath path;
+    TextView avgSpeed;
+    TextView instSpeed;
+    DecimalFormat df = new DecimalFormat("#.##");
 
-    MyPath andata;
-    Location end = null;
-
-
-    MyLocationListener(MySpeedList list,AtomicBoolean atomBoolUpd,AtomicBoolean atomBoolMon){
+    MyLocationListener(MySpeedList list, AtomicBoolean atomBoolUpd, AtomicBoolean atomBoolMon, MyPath startedPath, Context mainContext){
         speedList=list;
         isUpdated=atomBoolUpd;
         isMonitoring=atomBoolMon;
-
-        Location[]auxArray = new Location[3];
-//        Location aux= new Location("");
-//        aux.setLongitude(8.908138);
-//        aux.setLatitude(44.411093);
-//        auxArray[0]=aux;
-//        Location aux2= new Location("");
-//        aux2.setLongitude(8.911964);
-//        aux2.setLatitude(44.413459);
-//        auxArray[1]=aux2;
-//        Location aux3= new Location("");
-//        aux3.setLongitude(8.928115);
-//        aux3.setLatitude(44.408726);
-//        auxArray[2]=aux3;
-        Location aux= new Location("");
-        aux.setLongitude(8.888282);
-        aux.setLatitude(44.410338);
-        auxArray[0]=aux;
-        Location aux2= new Location("");
-        aux2.setLongitude(8.888710);
-        aux2.setLatitude(44.410240);
-        auxArray[1]=aux2;
-        Location aux3= new Location("");
-        aux3.setLongitude(8.889450);
-        aux3.setLatitude(44.410021);
-        auxArray[2]=aux3;
-
-        andata= new MyPath(auxArray, 60);
-
+        path= startedPath;
+        Activity mainActivity= (Activity) mainContext;
+        mainActivity.setContentView(R.layout.activity_main);
+        avgSpeed= mainActivity.findViewById(R.id.avgSpeedView);
+        instSpeed= mainActivity.findViewById(R.id.instantSpeedView);
     }
 
     @Override
     public void onLocationChanged(Location location) {
 
         if(!isMonitoring.get()){
-            if(andata.getStart().distanceTo(location)<20){
-                Log.d(TAG,"start monitoring");
-                isMonitoring.set(true);
 
+            if (path.getStart().distanceTo(location) < 20) {
+                Log.d(TAG,  "start monitoring");
+                isMonitoring.set(true);
             }
         }
+
         if(isMonitoring.get()) {
-            if(andata.getEnd().distanceTo(location)<20){
+            if(path.getEnd().distanceTo(location)<20){
                 isMonitoring.set(false);
-                andata.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
+                path.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
                 speedList.clear();
                 Log.d(TAG,"finito");
+                for (float sp:path.getAvgArray()){
+                    Log.d(TAG,String.valueOf(sp));
+                };
                 return;
             }
-            Log.d(TAG,String.valueOf(andata.getNextCheckpoint().distanceTo(location)));
-            if(andata.getNextCheckpoint().distanceTo(location)<20){
+            Log.d(TAG,String.valueOf(path.getNextCheckpoint().distanceTo(location)));
+            if(path.getNextCheckpoint().distanceTo(location)<20){
 
-                andata.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
+                path.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
                 speedList.clear();
                 Log.d(TAG,"check");
             }
-            speedList.add(location.getSpeed() * 3.6F);
+            float speed = location.getSpeed();
+            speedList.add(speed );
+            instSpeed.setText(df.format(speed));
+            avgSpeed.setText(df.format(speedList.getAverageSpeed()));
             isUpdated.set(true);
         }
     }

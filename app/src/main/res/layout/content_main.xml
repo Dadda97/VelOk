@@ -20,7 +20,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/instantSpeedView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.777" />
+        app:layout_constraintVertical_bias="0.763" />
 
     <TextView
         android:id="@+id/avgSpeedView"
@@ -29,7 +29,7 @@
         android:fontFamily="sans-serif-medium"
         android:foregroundGravity="center"
         android:gravity="center"
-        android:text="@string/waiting_str"
+        android:text="62.3"
         android:textColor="@android:color/black"
         android:textSize="60sp"
         android:textStyle="bold"
@@ -43,7 +43,7 @@
         android:id="@+id/instantSpeedView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/waiting_str"
+        android:text="58.0"
         android:textColor="@android:color/darker_gray"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -63,7 +63,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/avgSpeedView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintVertical_bias="0.233" />
 
     <TextView
         android:id="@+id/textView3"
