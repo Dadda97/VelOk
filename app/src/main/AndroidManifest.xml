@@ -30,10 +30,10 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".WelcomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.velocok_beta.MainActivity" />
+                android:value="com.example.velocok_beta.WelcomeActivity" />
         </activity>
         <activity
             android:name=".MainActivity"
