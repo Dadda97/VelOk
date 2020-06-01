@@ -17,10 +17,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.006"
         app:layout_constraintStart_toEndOf="@+id/instantSpeedView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.763" />
+        app:layout_constraintVertical_bias="0.775" />
 
     <TextView
         android:id="@+id/avgSpeedView"
@@ -63,7 +63,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/avgSpeedView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.233" />
+        app:layout_constraintVertical_bias="0.245" />
 
     <TextView
         android:id="@+id/sectorsView"
@@ -75,5 +75,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/avgSpeedView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/averageSpeed"
+        app:layout_constraintBottom_toTopOf="@+id/avgSpeedView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.873" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/instantSpeed"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/instantSpeedView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sectorsView"
+        app:layout_constraintVertical_bias="0.82" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

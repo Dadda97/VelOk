@@ -5,6 +5,7 @@
     <string name="waiting_str">waiting…</string>
     <string name="defaultAvgSpeed">--.--</string>
     <string name="defaultInstantSpeed">--.--</string>
-    <string name="defaultPaths">Tratto1 : 55.02 km/h</string>
+    <string name="averageSpeed">Velocità Media Tratto</string>
+    <string name="instantSpeed">Velocità attuale</string>
     <string name="dark_theme">Dark Theme</string>
 </resources>
