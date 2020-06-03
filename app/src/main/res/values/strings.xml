@@ -5,7 +5,7 @@
     <string name="waiting_str">waiting…</string>
     <string name="defaultAvgSpeed">--.--</string>
     <string name="defaultInstantSpeed">--.--</string>
-    <string name="averageSpeed">Velocità Media Tratto</string>
-    <string name="instantSpeed">Velocità attuale</string>
+    <string name="averageSpeed">Sector average speed</string>
+    <string name="instantSpeed">Current speed</string>
     <string name="dark_theme">Dark Theme</string>
 </resources>
