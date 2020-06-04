@@ -157,9 +157,9 @@ public class MainActivity extends AppCompatActivity {
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
 
-        myLogicTask = new MyLogicTask(speedList, isUpdated, avgSpeedView, instantSpeedView);
-
-        myLogicTask.execute();
+//        myLogicTask = new MyLogicTask(speedList, isUpdated, avgSpeedView, instantSpeedView);
+//
+//        myLogicTask.execute();
 
 
 
@@ -176,6 +176,11 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
+    public void onPause(){
+        super.onPause();
+        locationManager.removeUpdates(locationListener);
+        Log.d(TAG,"Location REMOVED");
+    }
 
     @SuppressLint("MissingPermission")
 

@@ -8,23 +8,23 @@ public class MySpeedList {
     private BlockingQueue<Float> list = new LinkedBlockingQueue<>() ;
     private Float last;
 
-    public synchronized void add(Float el){
+    public void add(Float el){
         list.add(el);
         last=el;
     }
 
-    public synchronized float getAverageSpeed(){
+    public float getAverageSpeed(){
         float sum = 0;
         for (Float speed : list){
             sum += speed;
         }
         return sum / list.size();
     }
-    public synchronized float getLast(){
+    public float getLast(){
         return last;
     }
 
-    public synchronized void clear(){
+    public void clear(){
         list.clear();
     }
 }
