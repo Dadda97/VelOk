@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (!s.equals(getString(R.string.waiting_str))) {
                 if (Double.parseDouble(s.toString()) > 60) {
                     avgSpeedView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                     if (!overSpeed_notification_loop && isOverSpeed_notification_enabled) {
@@ -94,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
                     overSpeed_notification_loop = false;
                    // if (r.isPlaying()) { r.stop(); }
                 }
-            }
         }
 
         @Override
@@ -139,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        avgSpeedView.addTextChangedListener(myTextWatcher);
 
         speedList = new MySpeedList();
         isUpdated = new AtomicBoolean(false);     //maybe better in MySpeedList
