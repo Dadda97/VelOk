@@ -16,4 +16,9 @@
     <!-- Appearance Preferences -->
     <string name="dark_mode">Dark Mode</string>
 
+    <!-- History -->
+    <string name="set_1">Settore 1: </string>
+    <string name="set_2">Settore 2: </string>
+    <string name="set_3">Settore 3: </string>
+
 </resources>
