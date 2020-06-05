@@ -8,6 +8,6 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/main_activity"
-        android:title="Main" />
+        android:id="@+id/history_activity"
+        android:title="History" />
 </menu>
