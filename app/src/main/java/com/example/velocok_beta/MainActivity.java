@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     boolean overSpeed_notification_loop = false;
     boolean isOverSpeed_notification_enabled;
     int THRESHOLD;
-    Thread speed_notification;
+    //Thread speed_notification;
 
     private void alarmFunction() {
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -70,6 +70,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    Thread speed_notification =  new Thread(new Runnable() {
+        @Override
+        public void run() {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            for (int alarm = 0; alarm < THRESHOLD; alarm++) {
+                r.play();
+                while(r.isPlaying()){}
+            }
+        }
+    });
 
     TextWatcher myTextWatcher = new TextWatcher() {
 
@@ -125,18 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
         avgSpeedView = findViewById(R.id.avgSpeedView);
         instantSpeedView = findViewById(R.id.instantSpeedView);
-
-        speed_notification =  new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                for (int alarm = 0; alarm < THRESHOLD; alarm++) {
-                    r.play();
-                    while(r.isPlaying()){}
-                }
-            }
-        });
 
         avgSpeedView.addTextChangedListener(myTextWatcher);
 

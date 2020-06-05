@@ -24,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -212,8 +211,8 @@ public void checkGPS(){
                 i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 break;
-            case R.id.main_activity:
-                i = new Intent(this, MainActivity.class);
+            case R.id.history_activity:
+                i = new Intent(this, History.class);
                 startActivity(i);
         }
 
