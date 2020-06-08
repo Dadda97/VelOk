@@ -31,9 +31,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,65 +57,6 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences mPreferences;
     int mDayLight;
 
-
-    boolean overSpeed_notification_loop = false;
-    boolean isOverSpeed_notification_enabled;
-    int THRESHOLD;
-    //Thread speed_notification;
-
-    private void alarmFunction() {
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-        for (int alarm = 0; alarm < THRESHOLD; alarm++) {
-            r.play();
-            while(r.isPlaying()){}
-        }
-
-    }
-
-    Thread speed_notification =  new Thread(new Runnable() {
-        @Override
-        public void run() {
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            for (int alarm = 0; alarm < THRESHOLD; alarm++) {
-                r.play();
-                while(r.isPlaying()){}
-            }
-        }
-    });
-
-    TextWatcher myTextWatcher = new TextWatcher() {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (Double.parseDouble(s.toString()) > 60) {
-                    avgSpeedView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                    if (!overSpeed_notification_loop && isOverSpeed_notification_enabled) {
-                        overSpeed_notification_loop = true;
-                        speed_notification.start();
-                    }
-                } else {
-                    //avgSpeedView.setTextColor(getResources().getColor(R.color.black));
-                    avgSpeedView.setBackgroundColor(0);
-                    // TODO if sound is playing stop it
-                    overSpeed_notification_loop = false;
-                   // if (r.isPlaying()) { r.stop(); }
-                }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-
-    };
-
     LocationManager locationManager;
     LocationListener locationListener;
 
@@ -126,10 +69,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mDayLight = Integer.parseInt(mPreferences.getString("darkmode_preference", "0"));
-        isOverSpeed_notification_enabled = mPreferences.getBoolean("speed_notification", true);
-        THRESHOLD = Integer.parseInt(mPreferences.getString("threshold_sound", "3"));
         AppCompatDelegate.setDefaultNightMode(mDayLight);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -138,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         avgSpeedView = findViewById(R.id.avgSpeedView);
         instantSpeedView = findViewById(R.id.instantSpeedView);
 
-        avgSpeedView.addTextChangedListener(myTextWatcher);
 
         speedList = new MySpeedList();
         isUpdated = new AtomicBoolean(false);     //maybe better in MySpeedList
@@ -157,23 +96,7 @@ public class MainActivity extends AppCompatActivity {
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
 
-//        myLogicTask = new MyLogicTask(speedList, isUpdated, avgSpeedView, instantSpeedView);
-//
-//        myLogicTask.execute();
 
-
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
     public void onPause(){
