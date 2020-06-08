@@ -11,4 +11,24 @@
         <item>1</item>
         <item>3</item>
     </string-array>
+
+    <string-array name="news_entries">
+        <item>Business</item>
+        <item>Scienza</item>
+        <item>Generale</item>
+        <item>Salute</item>
+        <item>Sport</item>
+        <item>Tecnologia</item>
+        <item>Nessuna</item>
+    </string-array>
+
+    <string-array name="news_values">
+        <item>business</item>
+        <item>science</item>
+        <item></item>
+        <item>health</item>
+        <item>sports</item>
+        <item>technology</item>
+        <item>none</item>
+    </string-array>
 </resources>

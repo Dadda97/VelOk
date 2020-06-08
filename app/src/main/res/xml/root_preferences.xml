@@ -43,5 +43,14 @@
             android:singleLine="true"
             android:title="Number of sounds" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="News">
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/news_entries"
+            android:entryValues="@array/news_values"
+            android:key="news_preferences"
+            android:title="Category" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

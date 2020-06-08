@@ -40,7 +40,7 @@
             android:layout_height="match_parent"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:background="@color/cardWelcome"
+            android:background="?attr/colorBackgroundFloating"
             android:orientation="vertical">
 
             <TextView
@@ -73,7 +73,7 @@
             android:layout_height="match_parent"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:background="@color/cardWelcome"
+            android:background="?attr/colorBackgroundFloating"
             android:orientation="vertical">
 
             <TextView
@@ -106,7 +106,7 @@
             android:layout_height="match_parent"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:background="@color/cardWelcome"
+            android:background="?attr/colorBackgroundFloating"
             android:orientation="vertical">
 
             <TextView
@@ -138,7 +138,7 @@
             android:layout_height="match_parent"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:background="@color/cardWelcome"
+            android:background="?attr/colorBackgroundFloating"
             android:orientation="vertical">
 
             <TextView
@@ -170,7 +170,7 @@
             android:layout_height="match_parent"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:background="@color/cardWelcome"
+            android:background="?attr/colorBackgroundFloating"
             android:orientation="vertical">
 
             <TextView
@@ -216,7 +216,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="0.25"
-            android:background="@color/cardWelcome"
+            android:background="?attr/colorBackgroundFloating"
             android:onClick="openNewsBody"
             android:orientation="horizontal"
             android:paddingLeft="3dp"
@@ -253,7 +253,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="0.25"
-            android:background="@color/cardWelcome"
+            android:background="?attr/colorBackgroundFloating"
             android:onClick="openNewsBody"
             android:orientation="horizontal"
             android:paddingLeft="3dp"
@@ -288,7 +288,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="0.25"
-            android:background="@color/cardWelcome"
+            android:background="?attr/colorBackgroundFloating"
             android:onClick="openNewsBody"
             android:orientation="horizontal"
             android:paddingLeft="3dp"
@@ -323,7 +323,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="0.25"
-            android:background="@color/cardWelcome"
+            android:background="?attr/colorBackgroundFloating"
             android:onClick="openNewsBody"
             android:orientation="horizontal"
             android:paddingLeft="3dp"

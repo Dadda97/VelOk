@@ -11,8 +11,9 @@
     android:layout_marginEnd="30dp"
     android:layout_marginBottom="30dp"
     android:textAlignment="center"
-    app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="10dp">
+    app:cardBackgroundColor="?attr/colorBackgroundFloating"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,11 +21,13 @@
 
         <TextView
             android:id="@+id/pathDate"
+            style="@style/path_head"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="TEST"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -36,9 +39,11 @@
 
         <TextView
             android:id="@+id/settore_1"
+            style="@style/path_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/set_1"
+            android:textAppearance="?attr/textAppearanceBody1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.058"
@@ -48,9 +53,11 @@
 
         <TextView
             android:id="@+id/settore_2"
+            style="@style/path_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/set_2"
+            android:textAppearance="?attr/textAppearanceBody1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.058"
@@ -60,9 +67,11 @@
 
         <TextView
             android:id="@+id/settore_3"
+            style="@style/path_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/set_3"
+            android:textAppearance="@style/path_body"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.058"
@@ -105,9 +114,10 @@
 
         <TextView
             android:id="@+id/pathTitle"
+            style="@style/path_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/path_head"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
