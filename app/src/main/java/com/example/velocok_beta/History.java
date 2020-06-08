@@ -28,10 +28,7 @@ public class History extends AppCompatActivity {
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
         DB.getAllForAdapter(adapter);
-        t = findViewById(R.id.pathDate);
-        Integer recs_N = 0;
 
-        Log.d(TAG, recs_N.toString());
 
     }
 }
