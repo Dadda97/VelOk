@@ -1,17 +1,45 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">#EB5E28</item>
+       <!-- <item name="colorPrimaryDark">#047A4B</item> -->
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="backgroundColor">#CCC5B9</item>
+        <item name="colorBackgroundFloating">#FFFCF2</item>
+        <item name="android:textColor">@color/black</item>
+
+
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="path_head" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textColor">#EB5E28</item>
+    </style>
+
+    <style name="path_body" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">#F88053</item>
+    </style>
+
+    <style name="Preferences" parent="Theme.AppCompat.DayNight">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">#EB5E28</item>
+        <item name="colorAccent">#EB5E28</item>
+    </style>
+
+    <style name="History" parent="AppTheme">
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">#EB5E28</item>
+        <item name="textAppearanceHeadline6">@style/path_head</item>
+        <item name="textAppearanceBody1">@style/path_body</item>
+    </style>
+
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

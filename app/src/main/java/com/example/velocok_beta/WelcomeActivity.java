@@ -2,22 +2,28 @@ package com.example.velocok_beta;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
+import androidx.appcompat.widget.Toolbar;
+
 
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -35,9 +41,15 @@ public class WelcomeActivity extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener;
     int gpsInterval = 5000;
+    //////////////////FOR GUI//////////////////
+    SharedPreferences mPreferences;
+    int mDayLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mDayLight = Integer.parseInt(mPreferences.getString("darkmode_preference", "0"));
+        AppCompatDelegate.setDefaultNightMode(mDayLight);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
@@ -56,6 +68,9 @@ public class WelcomeActivity extends AppCompatActivity {
         locationListener = new MyLazyLocationListener(this);
 
         checkGPS();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -174,5 +189,33 @@ public void checkGPS(){
 
             return;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        Intent i;
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_settings:
+                i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+            case R.id.history_activity:
+                i = new Intent(this, History.class);
+                startActivity(i);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

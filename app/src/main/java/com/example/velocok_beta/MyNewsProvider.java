@@ -1,5 +1,6 @@
 package com.example.velocok_beta;
 
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -7,6 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.preference.PreferenceManager;
 
 import com.squareup.picasso.Picasso;
 
@@ -27,7 +30,8 @@ import java.util.Date;
 
 public class MyNewsProvider extends AsyncTask<Void,Void,Void> {
     private static  final String TAG = "MyNewsProvider";
-    private static  final String STARTURL="https://newsapi.org/v2/everything?language=it&sortby=relevancy&domains=ansa.it&from=";
+    private SharedPreferences mPreferences;
+   // private static String STARTURL="https://newsapi.org/v2/everything?language=it&sortby=relevancy&domains=ansa.it&from=";
     private int numberOfNews;
     private String[] titles =  null;
     private String[] bodies = null;
@@ -35,6 +39,7 @@ public class MyNewsProvider extends AsyncTask<Void,Void,Void> {
     private LinearLayout newsParent;
 
     public MyNewsProvider(LinearLayout parent){
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
         newsParent= parent;
         numberOfNews =  newsParent.getChildCount();
 
@@ -61,9 +66,16 @@ public class MyNewsProvider extends AsyncTask<Void,Void,Void> {
     private String buildURL(){
         SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
         Date date = new Date();
+        String category = mPreferences.getString("news_preferences", "");
         String dateString=formatter.format(date);
         String apiString= "&apiKey=".concat(BuildConfig.NEWS_KEY);
-        return STARTURL.concat(dateString).concat(apiString);
+        String STARTURL="https://newsapi.org/v2/everything?language=it&sortby=relevancy&domains=ansa.it&from=";
+        if (!category.equals("none")) {
+            STARTURL = "https://newsapi.org/v2/top-headlines?country=it&category=".concat(category);
+            return STARTURL.concat(apiString);
+        } else {
+            return STARTURL.concat(dateString).concat(apiString);
+        }
     }
     private void getNewsFromApi() {
         Log.d(TAG,buildURL());

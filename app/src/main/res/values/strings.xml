@@ -8,4 +8,17 @@
     <string name="averageSpeed">Sector average speed</string>
     <string name="instantSpeed">Current speed</string>
     <string name="dark_theme">Dark Theme</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="appearance_header">Appearance</string>
+
+    <!-- Appearance Preferences -->
+    <string name="dark_mode">Dark Mode</string>
+
+    <!-- History -->
+    <string name="set_1">Settore 1: </string>
+    <string name="set_2">Settore 2: </string>
+    <string name="set_3">Settore 3: </string>
+
 </resources>
