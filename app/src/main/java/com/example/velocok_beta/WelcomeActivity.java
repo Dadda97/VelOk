@@ -1,14 +1,5 @@
 package com.example.velocok_beta;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
-import androidx.appcompat.widget.Toolbar;
-
-
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,21 +18,25 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
+
 
 public class WelcomeActivity extends AppCompatActivity {
-    private final String TAG="Welcome Activity";
-    //////////////////FOR Weather & News//////////////////
-    private LinearLayout newsParent;
-    private int numberOfNews;
+    private final String TAG = "Welcome Activity";
+
     MyNewsProvider newsProvider;
-    private LinearLayout weatherParent;
-    private int numberOfForecast;
     MyWeatherProvider weatherProvider;
-    //////////////////FOR GPS & location//////////////////
+
     LocationManager locationManager;
     LocationListener locationListener;
     int gpsInterval = 5000;
-    //////////////////FOR GUI//////////////////
+
     SharedPreferences mPreferences;
     int mDayLight;
 
@@ -74,62 +69,62 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         checkPermission();
 
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
-        Log.d(TAG,"LazyLocation REGISTERED");
+        Log.d(TAG, "LazyLocation REGISTERED");
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         locationManager.removeUpdates(locationListener);
-        Log.d(TAG,"LazyLocation REMOVED");
+        Log.d(TAG, "LazyLocation REMOVED");
     }
 
-public void checkGPS(){
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+    public void checkGPS() {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder ad = new AlertDialog.Builder(this);
 
-            ad.setTitle("Richiesto GPS");
-            ad.setMessage("Per il corretto funzionamento dell'app, è richiesta l'attivazione del proprio GPS.");
-            ad.setPositiveButton("Attiva",  new DialogInterface.OnClickListener() {
+            ad.setTitle(R.string.GPS_required_title_ad);
+            ad.setMessage(R.string.GPS_required_text_ad);
+            ad.setPositiveButton(R.string.GPS_required_positive_ad, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     Intent gpsOptionsIntent = new Intent(
                             android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(gpsOptionsIntent);
                 }
             });
-            ad.setNegativeButton("Annulla", null);
+            ad.setNegativeButton(R.string.GPS_required_negative_ad, null);
 
             ad.show();
 
 
         }
-}
+    }
 
-    public void initNews(){
-        Log.d(TAG,"STARTING Init News....");
-        newsParent = findViewById(R.id.newsParent);
-        numberOfNews =  newsParent.getChildCount();     //number of news defined by XML
+    public void initNews() {
+        Log.d(TAG, "STARTING Init News....");
+        LinearLayout newsParent = findViewById(R.id.newsParent);
 
         newsProvider = new MyNewsProvider(newsParent);
         newsProvider.execute();
     }
 
-    public void openNewsBody(View v){
+    public void openNewsBody(View v) {
         AlertDialog.Builder ad = new AlertDialog.Builder(this);
-        int newsId = Integer.parseInt((String)v.getTag());
+        int newsId = Integer.parseInt((String) v.getTag());
         ad.setTitle(newsProvider.getNewsTitle(newsId));
         ad.setMessage(newsProvider.getNewsBody(newsId));
         ad.show();
     }
-    public void initWeather(){
-        Log.d(TAG,"STARTING Init Weather....");
-        weatherParent = findViewById(R.id.weatherParent);
+
+    public void initWeather() {
+        Log.d(TAG, "STARTING Init Weather....");
+        LinearLayout weatherParent = findViewById(R.id.weatherParent);
 
         weatherProvider = new MyWeatherProvider(weatherParent);
         weatherProvider.execute();
@@ -142,27 +137,21 @@ public void checkGPS(){
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
+                if (grantResults.length == 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //TODO add execute of mycore
-
-                } else {
                     Toast toast = Toast.makeText(this, "The app cannot work without GPS permission", Toast.LENGTH_LONG);
-
+                    toast.show();
                 }
-                return;
+                break;
             }
             case 2: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
+                if (grantResults.length == 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //TODO add execute of mycore
-
-                } else {
                     Toast toast = Toast.makeText(this, "Without Internet permission the information shown in the app will be reduced", Toast.LENGTH_LONG);
-
+                    toast.show();
                 }
-                return;
+                break;
             }
 
             // other 'case' lines to check for other
@@ -170,21 +159,21 @@ public void checkGPS(){
         }
     }
 
-    private void checkPermission(){
-        if (ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG,"no GPS permissions");
+    private void checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "no GPS permissions");
 
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1
             );
 
             return;
         }
-        if (ContextCompat.checkSelfPermission( this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG,"no INTERNET permissions");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "no INTERNET permissions");
 
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.INTERNET,Manifest.permission.ACCESS_NETWORK_STATE},2
+                    new String[]{Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE}, 2
             );
 
             return;

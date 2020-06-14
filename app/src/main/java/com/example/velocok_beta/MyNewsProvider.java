@@ -1,15 +1,11 @@
 package com.example.velocok_beta;
 
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.view.View;
+import android.preference.PreferenceManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.preference.PreferenceManager;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,54 +18,51 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MyNewsProvider extends AsyncTask<Void,Void,Void> {
-    private static  final String TAG = "MyNewsProvider";
+public class MyNewsProvider extends AsyncTask<Void, Void, Void> {
+    private static final String TAG = "MyNewsProvider";
     private SharedPreferences mPreferences;
-   // private static String STARTURL="https://newsapi.org/v2/everything?language=it&sortby=relevancy&domains=ansa.it&from=";
     private int numberOfNews;
-    private String[] titles =  null;
+    private String[] titles = null;
     private String[] bodies = null;
     private String[] images = null;
     private LinearLayout newsParent;
 
-    public MyNewsProvider(LinearLayout parent){
+    public MyNewsProvider(LinearLayout parent) {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
-        newsParent= parent;
-        numberOfNews =  newsParent.getChildCount();
+        newsParent = parent;
+        numberOfNews = newsParent.getChildCount();
 
         titles = new String[numberOfNews];
         images = new String[numberOfNews];
         bodies = new String[numberOfNews];
 
 
-
     }
 
-    public String getNewsTitle(int i){
-          return titles[i];
+    public String getNewsTitle(int i) {
+        return titles[i];
     }
 
-    public String getNewsImagesURL(int i){
+    public String getNewsImagesURL(int i) {
         return images[i];
     }
 
-    public String getNewsBody(int i){
+    public String getNewsBody(int i) {
         return bodies[i];
     }
 
-    private String buildURL(){
+    private String buildURL() {
         SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
         Date date = new Date();
         String category = mPreferences.getString("news_preferences", "");
-        String dateString=formatter.format(date);
-        String apiString= "&apiKey=".concat(BuildConfig.NEWS_KEY);
-        String STARTURL="https://newsapi.org/v2/everything?language=it&sortby=relevancy&domains=ansa.it&from=";
+        String dateString = formatter.format(date);
+        String apiString = "&apiKey=".concat(BuildConfig.NEWS_KEY);
+        String STARTURL = "https://newsapi.org/v2/everything?language=it&sortby=relevancy&domains=ansa.it&from=";
         if (!category.equals("none")) {
             STARTURL = "https://newsapi.org/v2/top-headlines?country=it&category=".concat(category);
             return STARTURL.concat(apiString);
@@ -77,8 +70,8 @@ public class MyNewsProvider extends AsyncTask<Void,Void,Void> {
             return STARTURL.concat(dateString).concat(apiString);
         }
     }
+
     private void getNewsFromApi() {
-        Log.d(TAG,buildURL());
         try {
             InputStream is = new URL(buildURL()).openStream();
             try {
@@ -86,13 +79,12 @@ public class MyNewsProvider extends AsyncTask<Void,Void,Void> {
                 BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
                 String jsonText = readAll(rd);
                 JSONObject json = new JSONObject(jsonText);
-                JSONArray JsonArticles =(json.getJSONArray("articles"));
-                Log.d(TAG,JsonArticles.toString());
+                JSONArray JsonArticles = (json.getJSONArray("articles"));
 
                 for (int i = 0; i < numberOfNews; i++) {
-                    titles[i] = ( (JSONObject)   JsonArticles.get(i)).getString("title");
-                    images[i] = ( (JSONObject)   JsonArticles.get(i)).getString("urlToImage");
-                    bodies[i] = ( (JSONObject)   JsonArticles.get(i)).getString("content");
+                    titles[i] = ((JSONObject) JsonArticles.get(i)).getString("title");
+                    images[i] = ((JSONObject) JsonArticles.get(i)).getString("urlToImage");
+                    bodies[i] = ((JSONObject) JsonArticles.get(i)).getString("content");
                 }
 
             } finally {
@@ -122,19 +114,17 @@ public class MyNewsProvider extends AsyncTask<Void,Void,Void> {
 
     @Override
     protected void onPostExecute(Void v) {
-        Picasso.get().setLoggingEnabled(true);
-        for (int i = 0; i< numberOfNews;i++){
+        for (int i = 0; i < numberOfNews; i++) {
 
-            LinearLayout news= (LinearLayout) newsParent.getChildAt(i);
+            LinearLayout news = (LinearLayout) newsParent.getChildAt(i);
 
-            TextView text= (TextView) news.getChildAt(0);
+            TextView text = (TextView) news.getChildAt(0);
             text.setText(this.getNewsTitle(i));
 
-            ImageView image= (ImageView) news.getChildAt(1);
+            ImageView image = (ImageView) news.getChildAt(1);
             image.setContentDescription(this.getNewsTitle(i));
             Picasso.get().load(this.getNewsImagesURL(i)).resize(500, 500)
                     .centerCrop().into(image);
         }
-        Log.d(TAG,"FINISHED Init News....");
     }
 }

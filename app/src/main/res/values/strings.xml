@@ -9,6 +9,11 @@
     <string name="instantSpeed">Current speed</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="GPS_required_title_ad">GPS required</string>
+    <string name="GPS_required_text_ad">For the correct operation of the app, activation of your GPS is required.</string>
+    <string name="GPS_required_positive_ad">Activate</string>
+    <string name="GPS_required_negative_ad">Cancel</string>
+
 
     <!-- Preference Titles -->
     <string name="appearance_header">Appearance</string>
@@ -17,8 +22,8 @@
     <string name="dark_mode">Dark Mode</string>
 
     <!-- History -->
-    <string name="set_1">Settore 1: </string>
-    <string name="set_2">Settore 2: </string>
-    <string name="set_3">Settore 3: </string>
+    <string name="set_1">Sector 1: </string>
+    <string name="set_2">Sector 2: </string>
+    <string name="set_3">Sector 3: </string>
 
 </resources>

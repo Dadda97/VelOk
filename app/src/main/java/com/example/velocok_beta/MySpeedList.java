@@ -5,26 +5,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class MySpeedList {
 
-    private BlockingQueue<Float> list = new LinkedBlockingQueue<>() ;
-    private Float last;
+    private BlockingQueue<Float> list = new LinkedBlockingQueue<>();
 
-    public void add(Float el){
+    public void add(Float el) {
         list.add(el);
-        last=el;
     }
 
-    public float getAverageSpeed(){
+    public float getAverageSpeed() {
         float sum = 0;
-        for (Float speed : list){
+        for (Float speed : list) {
             sum += speed;
         }
         return sum / list.size();
     }
-    public float getLast(){
-        return last;
-    }
 
-    public void clear(){
+    public void clear() {
         list.clear();
     }
 }

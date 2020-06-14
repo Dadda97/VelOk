@@ -28,15 +28,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PathViewHolder> {
 
         PathViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.Card1);
-            date = (TextView)itemView.findViewById(R.id.pathDate);
+            cv = itemView.findViewById(R.id.Card1);
+            date = itemView.findViewById(R.id.pathDate);
             speed_1 = itemView.findViewById(R.id.settore_1_val);
             speed_2 = itemView.findViewById(R.id.settore_2_val);
             speed_3 = itemView.findViewById(R.id.settore_3_val);
             title = itemView.findViewById(R.id.pathTitle);
         }
     }
+
     List<DB_Path> paths;
+
     RVAdapter(List<DB_Path> paths) {
         this.paths = paths;
     }

@@ -4,13 +4,10 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
-
-import org.w3c.dom.Text;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -39,7 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void darkModeSetting(View v) {
         popUp = new PopupWindow(this);
-        popUp.showAtLocation(v, Gravity.BOTTOM, 10,10);
-        popUp.update(50,50,300,80);
+        popUp.showAtLocation(v, Gravity.BOTTOM, 10, 10);
+        popUp.update(50, 50, 300, 80);
     }
 }

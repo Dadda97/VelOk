@@ -16,10 +16,10 @@ public interface DB_Dao {
     List<DB_Path> getByIds(int UID);
 
     @Insert
-    void insertAll(DB_Path... path );
+    void insertAll(DB_Path... path);
 
     @Query("DELETE FROM DB_Path")
-    public void deleteAll();
+    void deleteAll();
 
     @Delete
     void delete(DB_Path path);

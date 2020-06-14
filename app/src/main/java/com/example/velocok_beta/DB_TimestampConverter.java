@@ -1,7 +1,5 @@
 package com.example.velocok_beta;
 
-import android.util.Log;
-
 import androidx.room.TypeConverter;
 
 import java.text.DateFormat;
@@ -11,7 +9,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class DB_TimestampConverter {
-    private static final String  TAG="DB_TimestampConverter";
+    private static final String TAG = "DB_TimestampConverter";
     private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @TypeConverter

@@ -1,7 +1,5 @@
 package com.example.velocok_beta;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -9,7 +7,6 @@ import androidx.room.TypeConverters;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -28,30 +25,30 @@ public class DB_Path {
     @TypeConverters({DB_FloatListConverter.class})
     public List<Float> speeds;
 
-   public String name;
+    public String name;
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setSpeeds(float[] floatArray){
-        Float[] FloatArray= new Float[floatArray.length];
-        int i=0;
-        for (float f : floatArray){
-            FloatArray[i]= floatArray[i];
+    public void setSpeeds(float[] floatArray) {
+        Float[] FloatArray = new Float[floatArray.length];
+        int i = 0;
+        for (float f : floatArray) {
+            FloatArray[i] = floatArray[i];
             i++;
         }
-        this.speeds= Arrays.asList(FloatArray);
+        this.speeds = Arrays.asList(FloatArray);
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public String getDate(){
+    public String getDate() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         TimeZone timeZone = TimeZone.getTimeZone("Europe/Rome");
-        if(this.timestamp!=null){
+        if (this.timestamp != null) {
             df.setTimeZone(timeZone);
             return df.format(this.timestamp);
         }
@@ -64,15 +61,16 @@ public class DB_Path {
 
 
     public List<Float> getSpeeds() {
-        if (this.speeds!=null){
+        if (this.speeds != null) {
             return this.speeds;
         }
         return null;
     }
-    public void setDate(Date date){
-        if(date==null){
-            date= new Date();
+
+    public void setDate(Date date) {
+        if (date == null) {
+            date = new Date();
         }
-        this.timestamp=date;
+        this.timestamp = date;
     }
 }

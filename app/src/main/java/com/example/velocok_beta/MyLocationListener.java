@@ -2,7 +2,6 @@ package com.example.velocok_beta;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -11,31 +10,28 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
-public class MyLocationListener extends AppCompatActivity implements LocationListener   {
+public class MyLocationListener extends AppCompatActivity implements LocationListener {
 
     private static final String TAG = "MyLocationListener ";
 
     private MySpeedList speedList;
-    AtomicBoolean isUpdated;
-    AtomicBoolean isMonitoring;
+    Boolean isUpdated = false;
+    Boolean isMonitoring = false;
     MyPath path;
     TextView avgSpeed;
     TextView instSpeed;
@@ -49,33 +45,32 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
     int THRESHOLD;
     boolean isOverSpeed_notification_enabled;
     boolean overspeed_notification_loop;
-    int countSector=1;
 
-    MyLocationListener(MySpeedList list, AtomicBoolean atomBoolUpd, AtomicBoolean atomBoolMon, MyPath startedPath, Context mainContext_){
-        speedList=list;
-        isUpdated=atomBoolUpd;
-        isMonitoring=atomBoolMon;
-        path= startedPath;
-        mainContext= mainContext_;
-        mainActivity= (Activity) mainContext_;
+    MyLocationListener(MyPath startedPath, Context mainContext_) {
+        speedList = new MySpeedList();
+
+        path = startedPath;
+        mainContext = mainContext_;
+        mainActivity = (Activity) mainContext_;
         mainActivity.setContentView(R.layout.activity_main);
-        avgSpeed= mainActivity.findViewById(R.id.avgSpeedView);
-        instSpeed= mainActivity.findViewById(R.id.instantSpeedView);
-        sectorsView =mainActivity.findViewById(R.id.sectorsView);
+        avgSpeed = mainActivity.findViewById(R.id.avgSpeedView);
+        instSpeed = mainActivity.findViewById(R.id.instantSpeedView);
+        sectorsView = mainActivity.findViewById(R.id.sectorsView);
         mPref = PreferenceManager.getDefaultSharedPreferences(mainContext_);
         THRESHOLD = Integer.parseInt(mPref.getString("threshold_sound", "3"));
         isOverSpeed_notification_enabled = mPref.getBoolean("speed_notification", true);
         overspeed_notification_loop = false;
         executor = Executors.newSingleThreadExecutor();
 
-        speed_notification =  new Thread(new Runnable() {
+        speed_notification = new Thread(new Runnable() {
             @Override
             public void run() {
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 Ringtone r = RingtoneManager.getRingtone(mainContext, notification);
                 for (int alarm = 0; alarm < THRESHOLD; alarm++) {
                     r.play();
-                    while(r.isPlaying()){}
+                    while (r.isPlaying()) {
+                    }
                 }
             }
         });
@@ -84,32 +79,23 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
     @Override
     public void onLocationChanged(Location location) {
 
-        if(!isMonitoring.get()){
+        if (!isMonitoring) {
 
             if (path.getStart().distanceTo(location) < 30) {
-                Log.d(TAG,  "start monitoring");
-                isMonitoring.set(true);
+                Log.d(TAG, "start monitoring");
+                isMonitoring = true;
             }
         }
 
-        if(isMonitoring.get()) {
-            if(path.getEnd().distanceTo(location)<30){
-                isMonitoring.set(false);
+        if (isMonitoring) {
+            if (path.getEnd().distanceTo(location) < 30) {
+                isMonitoring = false;
                 path.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
 
-                Log.d(TAG,"FINISHED");
-                for (float sp:path.getAvgArray()){
-                    Log.d(TAG,String.valueOf(sp));
-                };
                 finishMonitoring();
-
-
                 return;
             }
-            Log.d(TAG, String.valueOf(path.getNextCheckpoint()));
-            Log.d(TAG,String.valueOf(path.getNextCheckpoint().distanceTo(location)));
-            if(path.getNextCheckpoint().distanceTo(location)<30){
-                Log.d(TAG,"CHECKPOINT");
+            if (path.getNextCheckpoint().distanceTo(location) < 30) {
                 path.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
 
                 sectorsView.setText(path.getSectorsMessage());
@@ -117,27 +103,25 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
                 speedList.clear();
             }
             float speed = location.getSpeed();
-            speedList.add(speed );
+            speedList.add(speed);
             instSpeed.setText(df.format(speed));
             Float avgspd = speedList.getAverageSpeed();
             avgSpeed.setText(df.format(avgspd));
-            if (avgspd > 60) {
+            if (avgspd > path.getSpeedLimit()) {
                 avgSpeed.setBackgroundResource(R.color.colorAccent);
                 if (!overspeed_notification_loop && isOverSpeed_notification_enabled) {
                     overspeed_notification_loop = true;
                     executor.submit(speed_notification);
                 }
-            }
-            else {
+            } else {
                 avgSpeed.setBackgroundResource(0);
                 overspeed_notification_loop = false;
             }
-            isUpdated.set(true);
+            isUpdated = true;
         }
     }
 
-    private void finishMonitoring(){
-        Log.d(TAG, "finishing");
+    private void finishMonitoring() {
         AlertDialog.Builder ad = new AlertDialog.Builder(mainActivity);
 
         ad.setTitle(Html.fromHtml("<font color='#FF7F27'>This is a test</font>"));
@@ -146,7 +130,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
         MyDatabase DB = new MyDatabase(mainContext);
         DB.insert(path);
         DB.getAll();
-        final AlertDialog closingDialog= ad.create();
+        final AlertDialog closingDialog = ad.create();
         closingDialog.show();
 
         final Timer timer = new Timer();
@@ -155,13 +139,14 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
                 closingDialog.dismiss();
                 speedList.clear();
                 timer.cancel();
-                Intent welcomeActivity = new Intent(mainContext,WelcomeActivity.class);
+                Intent welcomeActivity = new Intent(mainContext, WelcomeActivity.class);
                 mainContext.startActivity(welcomeActivity);
                 finish();
             }
         }, 5000);
 
     }
+
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 

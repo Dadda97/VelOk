@@ -6,61 +6,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
-
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    AtomicBoolean isUpdated;
-    MySpeedList speedList;
-    AtomicBoolean isMonitoring;
-
     TextView avgSpeedView;
     TextView instantSpeedView;
-    Button monitoringButton;
 
     SharedPreferences mPreferences;
     int mDayLight;
 
     LocationManager locationManager;
     LocationListener locationListener;
-
-    MyLogicTask myLogicTask;
 
     int gpsInterval = 1000;
 
@@ -79,66 +51,44 @@ public class MainActivity extends AppCompatActivity {
         instantSpeedView = findViewById(R.id.instantSpeedView);
 
 
-        speedList = new MySpeedList();
-        isUpdated = new AtomicBoolean(false);     //maybe better in MySpeedList
-        isMonitoring = new AtomicBoolean(false);
-
-        MyPath startedPath = (MyPath) getIntent().getParcelableExtra("path");
-        Log.d(TAG, "STARTED path: ".concat(startedPath.getName()));
+        MyPath startedPath = getIntent().getParcelableExtra("path");
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener(speedList, isUpdated, isMonitoring, startedPath, this );
-
-
-
+        locationListener = new MyLocationListener(startedPath, this);
 
         checkPermission();
 
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
-
-
     }
 
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         locationManager.removeUpdates(locationListener);
-        Log.d(TAG,"Location REMOVED");
     }
 
+    @SuppressWarnings("NullableProblems")
     @SuppressLint("MissingPermission")
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //TODO add execute of mycore
-
-                } else {
-                    Toast toast = Toast.makeText(this, "The app cannot work without GPS permission", Toast.LENGTH_LONG);
-
-                }
-                return;
+        if (requestCode == 1) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length == 0
+                    || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast toast = Toast.makeText(this, "The app cannot work without GPS permission", Toast.LENGTH_LONG);
+                toast.show();
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
+        } else {
+            throw new IllegalStateException("Unexpected value: " + requestCode);
         }
     }
 
-    private void checkPermission(){
-        if (ContextCompat.checkSelfPermission( this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG,"no permissions");
-
+    private void checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1
             );
-
-            return;
         }
     }
 

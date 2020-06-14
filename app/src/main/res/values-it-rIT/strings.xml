@@ -9,4 +9,21 @@
     <string name="instantSpeed">Velocità attuale</string>
     <string name="km_h">km/h</string>
     <string name="waiting_str">attendere…</string>
+    <string name="title_activity_settings">Impostazioni</string>
+    <string name="GPS_required_title_ad">GPS richiesto</string>
+    <string name="GPS_required_text_ad">Per il corretto funzioamento dell\'app, attivare il GPS</string>
+    <string name="GPS_required_positive_ad">Attiva</string>
+    <string name="GPS_required_negative_ad">Annulla</string>
+
+
+    <!-- Preference Titles -->
+    <string name="appearance_header">Aspetto</string>
+
+    <!-- Appearance Preferences -->
+    <string name="dark_mode">Modalità Scuro</string>
+
+    <!-- History -->
+    <string name="set_1">Settore 1: </string>
+    <string name="set_2">Settore 2: </string>
+    <string name="set_3">Settore 3: </string>
 </resources>
