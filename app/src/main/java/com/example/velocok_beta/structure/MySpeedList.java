@@ -1,11 +1,11 @@
-package com.example.velocok_beta;
+package com.example.velocok_beta.structure;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MySpeedList {
 
-    private BlockingQueue<Float> list = new LinkedBlockingQueue<>();
+    private List<Float> list = new LinkedList<>();
 
     public void add(Float el) {
         list.add(el);

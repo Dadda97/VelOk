@@ -13,6 +13,7 @@
     <string name="GPS_required_text_ad">For the correct operation of the app, activation of your GPS is required.</string>
     <string name="GPS_required_positive_ad">Activate</string>
     <string name="GPS_required_negative_ad">Cancel</string>
+    <string name="sector">Sector </string>
 
 
     <!-- Preference Titles -->

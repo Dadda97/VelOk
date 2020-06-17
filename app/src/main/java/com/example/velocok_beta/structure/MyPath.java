@@ -1,4 +1,4 @@
-package com.example.velocok_beta;
+package com.example.velocok_beta.structure;
 
 
 import android.location.Location;
@@ -17,7 +17,7 @@ public class MyPath implements Parcelable {
     private float[] speedArray;
     DecimalFormat df = new DecimalFormat("#.00");
 
-    MyPath(Location[] positions, double speed, String pathName) {
+    public MyPath(Location[] positions, double speed, String pathName) {
         if (positions.length < 2) {
             throw new IllegalArgumentException();
         }

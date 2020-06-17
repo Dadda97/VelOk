@@ -1,4 +1,4 @@
-package com.example.velocok_beta;
+package com.example.velocok_beta.database;
 
 import androidx.room.TypeConverter;
 

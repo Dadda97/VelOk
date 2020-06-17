@@ -21,6 +21,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.velocok_beta.locationListener.MyLocationListener;
+import com.example.velocok_beta.structure.MyPath;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -55,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLocationListener(startedPath, this);
 
+        checkPermission();
+
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
         checkPermission();
 
         locationManager.requestLocationUpdates(

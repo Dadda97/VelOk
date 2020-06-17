@@ -1,4 +1,4 @@
-package com.example.velocok_beta;
+package com.example.velocok_beta.locationListener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,6 +17,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.velocok_beta.structure.MyPath;
+import com.example.velocok_beta.structure.MySpeedList;
+import com.example.velocok_beta.R;
+import com.example.velocok_beta.WelcomeActivity;
+import com.example.velocok_beta.database.MyDatabase;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
@@ -46,7 +52,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
     boolean isOverSpeed_notification_enabled;
     boolean overspeed_notification_loop;
 
-    MyLocationListener(MyPath startedPath, Context mainContext_) {
+    public MyLocationListener(MyPath startedPath, Context mainContext_) {
         speedList = new MySpeedList();
 
         path = startedPath;

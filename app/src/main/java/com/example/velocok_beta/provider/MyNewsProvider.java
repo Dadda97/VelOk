@@ -1,4 +1,4 @@
-package com.example.velocok_beta;
+package com.example.velocok_beta.provider;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.velocok_beta.BuildConfig;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;

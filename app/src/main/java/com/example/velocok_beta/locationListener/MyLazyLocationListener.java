@@ -1,4 +1,4 @@
-package com.example.velocok_beta;
+package com.example.velocok_beta.locationListener;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,9 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.velocok_beta.MainActivity;
+import com.example.velocok_beta.structure.MyPath;
+
 public class MyLazyLocationListener implements LocationListener {
     private final static String TAG = "MyLazyLocationListener ";
 
@@ -14,7 +17,7 @@ public class MyLazyLocationListener implements LocationListener {
 
     Context welcomeActivity;
 
-    MyLazyLocationListener(Context context) {
+    public MyLazyLocationListener(Context context) {
 
         welcomeActivity = context;
 

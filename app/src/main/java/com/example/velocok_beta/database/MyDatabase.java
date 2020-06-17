@@ -1,10 +1,12 @@
-package com.example.velocok_beta;
+package com.example.velocok_beta.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.room.Room;
+
+import com.example.velocok_beta.structure.MyPath;
+import com.example.velocok_beta.RVAdapter;
 
 import java.util.List;
 

@@ -26,6 +26,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
+import com.example.velocok_beta.locationListener.MyLazyLocationListener;
+import com.example.velocok_beta.provider.MyNewsProvider;
+import com.example.velocok_beta.provider.MyWeatherProvider;
+
 
 public class WelcomeActivity extends AppCompatActivity {
     private final String TAG = "Welcome Activity";
