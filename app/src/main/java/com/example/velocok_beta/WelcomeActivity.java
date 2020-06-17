@@ -1,6 +1,7 @@
 package com.example.velocok_beta;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,16 +58,14 @@ public class WelcomeActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        checkPermission();
-
         initNews();
 
         initWeather();
 
+        checkPermission();
+
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLazyLocationListener(this);
-
-        checkGPS();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,10 +74,10 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        checkPermission();
 
-        locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+        checkGPS();
+
+
         Log.d(TAG, "LazyLocation REGISTERED");
     }
 
@@ -91,19 +90,20 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void checkGPS() {
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder ad = new AlertDialog.Builder(this);
-
-            ad.setTitle(R.string.GPS_required_title_ad);
-            ad.setMessage(R.string.GPS_required_text_ad);
-            ad.setPositiveButton(R.string.GPS_required_positive_ad, new DialogInterface.OnClickListener() {
+            AlertDialog.Builder ad_builder = new AlertDialog.Builder(this);
+            AlertDialog ad;
+            ad_builder.setTitle(R.string.GPS_required_title_ad);
+            ad_builder.setMessage(R.string.GPS_required_text_ad);
+            ad_builder.setPositiveButton(R.string.GPS_required_positive_ad, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     Intent gpsOptionsIntent = new Intent(
                             android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(gpsOptionsIntent);
+
                 }
             });
-            ad.setNegativeButton(R.string.GPS_required_negative_ad, null);
-
+            ad_builder.setNegativeButton(R.string.GPS_required_negative_ad, null);
+            ad = ad_builder.create();
             ad.show();
 
 
@@ -135,6 +135,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
@@ -142,21 +143,27 @@ public class WelcomeActivity extends AppCompatActivity {
             case 1: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length == 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast toast = Toast.makeText(this, "The app cannot work without GPS permission", Toast.LENGTH_LONG);
                     toast.show();
+                }else{
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
                 }
                 break;
             }
             case 2: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length == 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast toast = Toast.makeText(this, "Without Internet permission the information shown in the app will be reduced", Toast.LENGTH_LONG);
                     toast.show();
+                    toast.cancel();
                 }
                 break;
             }
+            default:
+                throw new IllegalStateException("Unexpected value: " + requestCode);
 
             // other 'case' lines to check for other
             // permissions this app might request.
@@ -179,8 +186,6 @@ public class WelcomeActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE}, 2
             );
-
-            return;
         }
     }
 

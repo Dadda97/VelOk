@@ -53,22 +53,18 @@ public class MainActivity extends AppCompatActivity {
         avgSpeedView = findViewById(R.id.avgSpeedView);
         instantSpeedView = findViewById(R.id.instantSpeedView);
 
+        checkPermission();
 
         MyPath startedPath = getIntent().getParcelableExtra("path");
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLocationListener(startedPath, this);
-
-        checkPermission();
-
-
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        checkPermission();
 
-        locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+
     }
 
     public void onPause() {
@@ -88,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
                     || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast toast = Toast.makeText(this, "The app cannot work without GPS permission", Toast.LENGTH_LONG);
                 toast.show();
+            }else{
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
             }
         } else {
             throw new IllegalStateException("Unexpected value: " + requestCode);
