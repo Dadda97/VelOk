@@ -88,6 +88,7 @@ public class WelcomeActivity extends AppCompatActivity {
         Log.d(TAG, "LazyLocation REMOVED");
     }
 
+    @SuppressLint("MissingPermission")
     public void checkGPS() {
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder ad_builder = new AlertDialog.Builder(this);
@@ -105,9 +106,9 @@ public class WelcomeActivity extends AppCompatActivity {
             ad_builder.setNegativeButton(R.string.GPS_required_negative_ad, null);
             ad = ad_builder.create();
             ad.show();
-
-
         }
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
     }
 
     public void initNews() {
@@ -147,6 +148,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(this, "The app cannot work without GPS permission", Toast.LENGTH_LONG);
                     toast.show();
                 }else{
+                    Log.d(TAG,"Registering locationListener aa");
                     locationManager.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
                 }
