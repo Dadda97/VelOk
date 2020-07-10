@@ -84,7 +84,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
 
     @Override
     public void onLocationChanged(Location location) {
-
+    Log.d(TAG,"location change listener");
         if (!isMonitoring) {
 
             if (path.getStart().distanceTo(location) < 30) {
