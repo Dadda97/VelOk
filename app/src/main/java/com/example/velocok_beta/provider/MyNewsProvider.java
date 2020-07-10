@@ -3,6 +3,7 @@ package com.example.velocok_beta.provider;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,6 +67,7 @@ public class MyNewsProvider extends AsyncTask<Void, Void, Void> {
         String STARTURL = "https://newsapi.org/v2/everything?language=it&sortby=relevancy&domains=ansa.it&from=";
         if (!category.equals("none")) {
             STARTURL = "https://newsapi.org/v2/top-headlines?country=it&category=".concat(category);
+            Log.d(TAG,STARTURL.concat(apiString));
             return STARTURL.concat(apiString);
         } else {
             return STARTURL.concat(dateString).concat(apiString);
@@ -81,13 +83,18 @@ public class MyNewsProvider extends AsyncTask<Void, Void, Void> {
                 String jsonText = readAll(rd);
                 JSONObject json = new JSONObject(jsonText);
                 JSONArray JsonArticles = (json.getJSONArray("articles"));
-
-                for (int i = 0; i < numberOfNews; i++) {
-                    titles[i] = ((JSONObject) JsonArticles.get(i)).getString("title");
-                    images[i] = ((JSONObject) JsonArticles.get(i)).getString("urlToImage");
-                    bodies[i] = ((JSONObject) JsonArticles.get(i)).getString("content");
+                if(JsonArticles.length()==0){
+                    for (int i = 0; i < numberOfNews; i++) {
+                        titles[i] = "Servizio NEWS non Disponibile";
+                        bodies[i] = "Al momento non è possibile usufruire di questo servizio. Ci scusiamo";
+                    }
+                }else {
+                    for (int i = 0; i < numberOfNews; i++) {
+                        titles[i] = ((JSONObject) JsonArticles.get(i)).getString("title");
+                        images[i] = ((JSONObject) JsonArticles.get(i)).getString("urlToImage");
+                        bodies[i] = ((JSONObject) JsonArticles.get(i)).getString("content");
+                    }
                 }
-
             } finally {
                 is.close();
             }
