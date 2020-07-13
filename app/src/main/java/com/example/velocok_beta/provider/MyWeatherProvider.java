@@ -73,11 +73,14 @@ public class MyWeatherProvider extends AsyncTask<Void, Void, Void> {
 
                 for (int i = 0; i < numberOfForecast; i++) {
                     JSONObject forecast = (JSONObject) JsonForecasts.get(i);
-                    int unixTime = forecast.getInt("dt") + 3600;
+                    int unixTime = forecast.getInt("dt") ;
+                    Date date = new java.util.Date(unixTime*1000L);
                     SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-                    times[i] = df.format(new Date(unixTime * 1000L));
+                    df.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));
+                    times[i] = df.format(date);
                     icons[i] = ICONURL.concat(((JSONObject) (forecast.getJSONArray("weather").get(0))).getString("icon")).concat("@2x.png");
-                    temps[i] = (forecast.getJSONObject("main").getString("temp")).concat("°C");
+                    temps[i] = (forecast.getJSONObject("main").getString("temp"));
+
                 }
 
             } finally {
