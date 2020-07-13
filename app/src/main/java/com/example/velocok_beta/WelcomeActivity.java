@@ -19,12 +19,12 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import com.example.velocok_beta.locationListener.MyLazyLocationListener;
@@ -62,8 +62,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         initWeather();
 
-        checkPermission();
-
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLazyLocationListener(this);
 
@@ -71,14 +69,19 @@ public class WelcomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        checkPermission();
         checkGPS();
 
+    }
 
-        Log.d(TAG, "LazyLocation REGISTERED");
+    @Override
+    public void onResume() { //to be removed?
+        super.onResume();
     }
 
     @Override
@@ -106,9 +109,13 @@ public class WelcomeActivity extends AppCompatActivity {
             ad_builder.setNegativeButton(R.string.GPS_required_negative_ad, null);
             ad = ad_builder.create();
             ad.show();
+
         }
-        locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+        if(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+            Log.d(TAG, "LazyLocation REGISTERED");
+        }
     }
 
     public void initNews() {
@@ -139,7 +146,7 @@ public class WelcomeActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.
@@ -173,16 +180,14 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void checkPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (!hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && !hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             Log.e(TAG, "no GPS permissions");
 
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1
             );
-
-            return;
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+        if (!hasPermission(Manifest.permission.INTERNET) && !hasPermission(Manifest.permission.ACCESS_NETWORK_STATE)) {
             Log.e(TAG, "no INTERNET permissions");
 
             ActivityCompat.requestPermissions(this,
@@ -217,5 +222,9 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean hasPermission(String perm) {
+        return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm));
     }
 }
