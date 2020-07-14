@@ -180,11 +180,11 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void checkPermission() {
-        if (!hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && !hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (!hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
             Log.e(TAG, "no GPS permissions");
 
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1
             );
         }
         if (!hasPermission(Manifest.permission.INTERNET) && !hasPermission(Manifest.permission.ACCESS_NETWORK_STATE)) {

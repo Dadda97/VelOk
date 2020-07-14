@@ -61,10 +61,15 @@ public class MainActivity extends AppCompatActivity {
         locationListener = new MyLocationListener(startedPath, this);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onResume() {
         super.onResume();
-
+        if(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
+            Log.d(TAG, "MAIN Location REGISTERED");
+        }
 
     }
 
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast toast = Toast.makeText(this, "The app cannot work without GPS permission", Toast.LENGTH_LONG);
                 toast.show();
             }else{
+                Log.d(TAG,"Main Location listener REGSTERED");
                 locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER, gpsInterval, 0, locationListener);
             }
@@ -95,12 +101,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG,"no PERMISSION");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG,"no GPS PERMISSION");
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1
             );
         }
+
     }
 
     @Override
@@ -124,5 +131,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private boolean hasPermission(String perm) {
+        return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm));
     }
 }
