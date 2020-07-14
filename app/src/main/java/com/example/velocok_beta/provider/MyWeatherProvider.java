@@ -80,7 +80,11 @@ public class MyWeatherProvider extends AsyncTask<Void, Void, Void> {
                     times[i] = df.format(date);
                     icons[i] = ICONURL.concat(((JSONObject) (forecast.getJSONArray("weather").get(0))).getString("icon")).concat("@2x.png");
                     temps[i] = (forecast.getJSONObject("main").getString("temp"));
-
+                    int dotIndex = temps[i].indexOf(".");
+                    if(dotIndex>0){
+                        temps[i] = temps[i].substring(0,dotIndex);
+                    }
+                    temps[i]= temps[i].concat(" °C");
                 }
 
             } finally {
