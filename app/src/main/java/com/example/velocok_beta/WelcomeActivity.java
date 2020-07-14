@@ -63,7 +63,7 @@ public class WelcomeActivity extends AppCompatActivity {
         initWeather();
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLazyLocationListener(this);
+        locationListener = new MyLazyLocationListener(this, gpsInterval);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

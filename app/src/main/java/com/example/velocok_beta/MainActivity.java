@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         MyPath startedPath = getIntent().getParcelableExtra("path");
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener(startedPath, this);
+        locationListener = new MyLocationListener(startedPath, this, gpsInterval);
     }
 
     @SuppressLint("MissingPermission")

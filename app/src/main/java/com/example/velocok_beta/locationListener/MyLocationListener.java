@@ -51,8 +51,9 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
     int THRESHOLD;
     boolean isOverSpeed_notification_enabled;
     boolean overspeed_notification_loop;
+    int GPSIntervalSec;
 
-    public MyLocationListener(MyPath startedPath, Context mainContext_) {
+    public MyLocationListener(MyPath startedPath, Context mainContext_, int GPSInterval) {
         speedList = new MySpeedList();
 
         path = startedPath;
@@ -63,11 +64,11 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
         instSpeed = mainActivity.findViewById(R.id.instantSpeedView);
         sectorsView = mainActivity.findViewById(R.id.sectorsView);
         mPref = PreferenceManager.getDefaultSharedPreferences(mainContext_);
+        GPSIntervalSec = GPSInterval/1000;
         THRESHOLD = Integer.parseInt(mPref.getString("threshold_sound", "3"));
         isOverSpeed_notification_enabled = mPref.getBoolean("speed_notification", true);
         overspeed_notification_loop = false;
         executor = Executors.newSingleThreadExecutor();
-
         speed_notification = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -85,23 +86,24 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
     @Override
     public void onLocationChanged(Location location) {
     Log.d(TAG,"location change listener");
+    double checkPointDistance =(location.getSpeed()/3)*GPSIntervalSec;
         if (!isMonitoring) {
 
-            if (path.getStart().distanceTo(location) < 30) {
+            if (path.getStart().distanceTo(location) < checkPointDistance) {
                 Log.d(TAG, "start monitoring");
                 isMonitoring = true;
             }
         }
 
         if (isMonitoring) {
-            if (path.getEnd().distanceTo(location) < 30) {
+            if (path.getEnd().distanceTo(location) < checkPointDistance) {
                 isMonitoring = false;
                 path.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
 
                 finishMonitoring();
                 return;
             }
-            if (path.getNextCheckpoint().distanceTo(location) < 30) {
+            if (path.getNextCheckpoint().distanceTo(location) < checkPointDistance) {
                 path.setAvgSpeedOfCheckpoint(speedList.getAverageSpeed());
 
                 sectorsView.setText(path.getSectorsMessage());

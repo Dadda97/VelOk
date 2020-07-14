@@ -17,7 +17,11 @@ public class MyLazyLocationListener implements LocationListener {
 
     Context welcomeActivity;
 
-    public MyLazyLocationListener(Context context) {
+    int GPSIntervalSec;
+
+    public MyLazyLocationListener(Context context, int GPSInterval) {
+
+        GPSIntervalSec=GPSInterval/1000;
 
         welcomeActivity = context;
 
@@ -70,7 +74,7 @@ public class MyLazyLocationListener implements LocationListener {
         for (MyPath path : paths) {
             Log.d(TAG, path.getName().concat(String.valueOf(path.getStart().distanceTo(location))));
 
-            if (path.getStart().distanceTo(location) < 100) {
+            if (path.getStart().distanceTo(location) < (location.getSpeed()/3)*GPSIntervalSec) {
                 Log.d(TAG, "Starting path: ".concat(path.getName()));
                 Intent mainActivity = new Intent(welcomeActivity, MainActivity.class);
                 mainActivity.putExtra("path", path);
