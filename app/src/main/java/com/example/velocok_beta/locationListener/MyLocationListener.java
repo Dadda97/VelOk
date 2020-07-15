@@ -86,7 +86,6 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onLocationChanged(Location location) {
     Log.d(TAG,"location change listener");
@@ -126,7 +125,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
                     executor.submit(speed_notification);
                 }
             } else {
-                avgSpeed.setTextAppearance(R.style.speedtext);
+                avgSpeed.setTextAppearance(mainContext, R.style.speedtext);
                 overspeed_notification_loop = false;
             }
             isUpdated = true;
