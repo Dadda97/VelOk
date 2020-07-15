@@ -7,6 +7,10 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="speedtext" parent="AppTheme">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="Preferences" parent="Theme.AppCompat.DayNight">
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">#EB5E28</item>

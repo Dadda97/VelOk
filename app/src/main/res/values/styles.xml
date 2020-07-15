@@ -9,8 +9,10 @@
         <item name="backgroundColor">#CCC5B9</item>
         <item name="colorBackgroundFloating">#FFFCF2</item>
         <item name="android:textColor">@color/black</item>
+    </style>
 
-
+    <style name="speedtext" parent="AppTheme">
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
