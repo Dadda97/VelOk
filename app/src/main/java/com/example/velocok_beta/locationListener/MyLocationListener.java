@@ -9,14 +9,17 @@ import android.location.LocationListener;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.velocok_beta.structure.MyPath;
 import com.example.velocok_beta.structure.MySpeedList;
@@ -83,6 +86,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onLocationChanged(Location location) {
     Log.d(TAG,"location change listener");
@@ -116,13 +120,13 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
             Float avgspd = speedList.getAverageSpeed();
             avgSpeed.setText(df.format(avgspd));
             if (avgspd > path.getSpeedLimit()) {
-                avgSpeed.setBackgroundResource(R.color.colorAccent);
+                avgSpeed.setTextColor(ContextCompat.getColor(mainContext, R.color.colorAccent));
                 if (!overspeed_notification_loop && isOverSpeed_notification_enabled) {
                     overspeed_notification_loop = true;
                     executor.submit(speed_notification);
                 }
             } else {
-                avgSpeed.setBackgroundResource(0);
+                avgSpeed.setTextAppearance(R.style.speedtext);
                 overspeed_notification_loop = false;
             }
             isUpdated = true;
