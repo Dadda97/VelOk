@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#EB5E28</item>
-       <!-- <item name="colorPrimaryDark">#047A4B</item> -->
+        <item name="colorPrimaryDark">#EB5E28</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="backgroundColor">#CCC5B9</item>
         <item name="colorBackgroundFloating">#FFFCF2</item>
