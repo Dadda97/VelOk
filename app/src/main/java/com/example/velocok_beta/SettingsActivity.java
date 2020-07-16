@@ -36,7 +36,6 @@ public class SettingsActivity extends AppCompatActivity {
                         if (key.equals("darkmode_preference")) {
                             int mDayLight = Integer.parseInt(prefs.getString("darkmode_preference", "0"));
                             AppCompatDelegate.setDefaultNightMode(mDayLight);
-                            //recreate();
                         }
                     }
                 }

@@ -20,7 +20,7 @@
     <PreferenceCategory app:title="@string/appearance_header">
 
         <ListPreference
-            android:defaultValue="false"
+            android:defaultValue="-1"
             android:entries="@array/darkmode_entries"
             android:entryValues="@array/darkmode_values"
             android:key="darkmode_preference"
@@ -46,7 +46,7 @@
     <PreferenceCategory android:title="News">
 
         <ListPreference
-            android:defaultValue="1"
+            android:defaultValue="none"
             android:entries="@array/news_entries"
             android:entryValues="@array/news_values"
             android:key="news_preferences"
