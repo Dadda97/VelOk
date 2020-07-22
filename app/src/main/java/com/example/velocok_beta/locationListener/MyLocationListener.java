@@ -88,10 +88,15 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
 
     @Override
     public void onLocationChanged(Location location) {
-    Log.d(TAG,"location change listener");
-    double checkPointDistance =(location.getSpeed()/3)*GPSIntervalSec;
-        if (!isMonitoring) {
+        float speed = (location.getSpeed()*3600)/1000;
+        Log.d(TAG,"location change listener");
+        Log.d(TAG,String.format("Curr Speed M/S %2f K/M %2f",location.getSpeed(),speed));
+        double checkPointDistance =(speed/2)*GPSIntervalSec;
 
+        sectorsView.setText(String.format("check: %2f  \n Distanza: %2f\n Velocità: %2f KM/H",checkPointDistance,path.getStart().distanceTo(location),speed));     //FOR PHYSICAL DEVICE DEBUG PURPOSE
+
+        Log.d(TAG,String.format("checkPointDistance %2f",checkPointDistance));
+        if (!isMonitoring) {
             if (path.getStart().distanceTo(location) < checkPointDistance) {
                 Log.d(TAG, "start monitoring");
                 isMonitoring = true;
@@ -113,7 +118,6 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
 
                 speedList.clear();
             }
-            float speed = location.getSpeed();
             speedList.add(speed);
             instSpeed.setText(df.format(speed));
             Float avgspd = speedList.getAverageSpeed();
@@ -135,7 +139,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
     private void finishMonitoring() {
         AlertDialog.Builder ad = new AlertDialog.Builder(mainActivity);
 
-        ad.setTitle(Html.fromHtml("<font color='#FF7F27'>This is a test</font>"));
+        ad.setTitle(Html.fromHtml("<font color='#FF7F27'>Sector Resume</font>"));
         ad.setMessage(path.getSectorsMessage());
         ad.create();
         MyDatabase DB = new MyDatabase(mainContext);

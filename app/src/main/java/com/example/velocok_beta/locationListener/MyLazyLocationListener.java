@@ -70,11 +70,14 @@ public class MyLazyLocationListener implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, location.toString());
+        float speed = (location.getSpeed()*3600)/1000;
+        double checkPointDistance =(speed/2)*GPSIntervalSec;
+        Log.d(TAG, String.format("checkPointDistance: %2f ",checkPointDistance));
 
         for (MyPath path : paths) {
             Log.d(TAG, path.getName().concat(String.valueOf(path.getStart().distanceTo(location))));
 
-            if (path.getStart().distanceTo(location) < (location.getSpeed()/3)*GPSIntervalSec) {
+            if (path.getStart().distanceTo(location) < checkPointDistance) {
                 Log.d(TAG, "Starting path: ".concat(path.getName()));
                 Intent mainActivity = new Intent(welcomeActivity, MainActivity.class);
                 mainActivity.putExtra("path", path);
