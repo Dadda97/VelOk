@@ -9,7 +9,7 @@ import java.util.List;
 
 @Dao
 public interface DB_Dao {
-    @Query("SELECT * FROM DB_Path")
+    @Query("SELECT * FROM DB_Path ORDER BY timestamp DESC")
     List<DB_Path> getAll();
 
     @Query("SELECT * FROM DB_Path WHERE uid = :UID")
