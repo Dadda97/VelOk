@@ -9,5 +9,5 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/history_activity"
-        android:title="History" />
+        android:title="@string/action_history" />
 </menu>

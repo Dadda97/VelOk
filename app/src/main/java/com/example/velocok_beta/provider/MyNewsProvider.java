@@ -1,6 +1,7 @@
 package com.example.velocok_beta.provider;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.velocok_beta.BuildConfig;
+import com.example.velocok_beta.R;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -85,8 +87,8 @@ public class MyNewsProvider extends AsyncTask<Void, Void, Void> {
                 JSONArray JsonArticles = (json.getJSONArray("articles"));
                 if(JsonArticles.length()==0){
                     for (int i = 0; i < numberOfNews; i++) {
-                        titles[i] = "Servizio NEWS non Disponibile";
-                        bodies[i] = "Al momento non è possibile usufruire di questo servizio. Ci scusiamo";
+                        titles[i] = newsParent.getResources().getString(R.string.news_not_available);
+                        bodies[i] = newsParent.getResources().getString(R.string.news_not_available_body);
                     }
                 }else {
                     for (int i = 0; i < numberOfNews; i++) {
@@ -98,9 +100,7 @@ public class MyNewsProvider extends AsyncTask<Void, Void, Void> {
             } finally {
                 is.close();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }

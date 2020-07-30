@@ -13,13 +13,13 @@
     </string-array>
 
     <string-array name="news_entries">
-        <item>Business</item>
-        <item>Scienza</item>
-        <item>Generale</item>
-        <item>Salute</item>
-        <item>Sport</item>
-        <item>Tecnologia</item>
-        <item>Nessuna</item>
+        <item>@string/news_category_business</item>
+        <item>@string/news_category_science</item>
+        <item>@string/news_category_general</item>
+        <item>@string/news_category_health</item>
+        <item>@string/news_category_sport</item>
+        <item>@string/news_category_tech</item>
+        <item>@string/news_category_none</item>
     </string-array>
 
     <string-array name="news_values">

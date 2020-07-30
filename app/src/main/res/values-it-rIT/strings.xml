@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">VelocOK-BETA</string>
-    <string name="action_settings">Impostazioni</string>
     <string name="averageSpeed">Velocità media settore</string>
     <string name="dark_theme">Tema scuro</string>
     <string name="defaultAvgSpeed">--.--</string>
@@ -28,4 +27,19 @@
     <string name="set_1">Settore 1: </string>
     <string name="set_2">Settore 2: </string>
     <string name="set_3">Settore 3: </string>
+    <string name="news_not_available">Servizio NEWS non Disponibile</string>
+    <string name="news_not_available_body">Al momento non è possibile usufruire di questo servizio. Ci scusiamo</string>
+    <string name="action_history">Cronologia</string>
+    <string name="action_settings">Impostazioni</string>
+
+
+    <!-- News category -->
+    <string name="news_category_business">Business</string>
+    <string name="news_category_science">Scienza</string>
+    <string name="news_category_general">Generale</string>
+    <string name="news_category_health">Salute</string>
+    <string name="news_category_sport">Sport</string>
+    <string name="news_category_tech">Tecnologia</string>
+    <string name="news_category_none">Nessuna</string>
+
 </resources>
