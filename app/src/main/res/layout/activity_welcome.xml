@@ -223,9 +223,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:maxLines="4"
+                android:paddingLeft="5sp"
+                android:paddingRight="10sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <ImageView
                 android:id="@+id/imageView6"
@@ -257,9 +262,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:maxLines="4"
+                android:paddingLeft="5sp"
+                android:paddingRight="10sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <ImageView
                 android:id="@+id/imageView7"
@@ -289,9 +299,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:maxLines="4"
+                android:paddingLeft="5sp"
+                android:paddingRight="10sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <ImageView
                 android:id="@+id/imageView8"
@@ -321,9 +336,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:maxLines="4"
+                android:paddingLeft="5sp"
+                android:paddingRight="10sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <ImageView
                 android:id="@+id/imageView9"

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,8 @@ import androidx.preference.PreferenceManager;
 import com.example.velocok_beta.locationListener.MyLazyLocationListener;
 import com.example.velocok_beta.provider.MyNewsProvider;
 import com.example.velocok_beta.provider.MyWeatherProvider;
+
+import static android.view.View.TEXT_ALIGNMENT_CENTER;
 
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -129,7 +133,13 @@ public class WelcomeActivity extends AppCompatActivity {
     public void openNewsBody(View v) {
         AlertDialog.Builder ad = new AlertDialog.Builder(this);
         int newsId = Integer.parseInt((String) v.getTag());
-        ad.setTitle(newsProvider.getNewsTitle(newsId));
+        TextView titleTextView = new TextView(this);
+        titleTextView.setText(newsProvider.getNewsTitle(newsId));
+        titleTextView.setPadding(55,25,55,10);
+        titleTextView.setTypeface(null, Typeface.BOLD);
+        titleTextView.setTextSize(18);
+        titleTextView.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+        ad.setCustomTitle(titleTextView);
         ad.setMessage(newsProvider.getNewsBody(newsId));
         ad.show();
     }
