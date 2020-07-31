@@ -43,4 +43,7 @@
     <string name="news_category_tech">Tech</string>
     <string name="news_category_none">None</string>
 
+    <string name="resume_dialog_title">Sector resume</string>
+
+
 </resources>

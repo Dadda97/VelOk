@@ -138,8 +138,8 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
 
     private void finishMonitoring() {
         AlertDialog.Builder ad = new AlertDialog.Builder(mainActivity);
-
-        ad.setTitle(Html.fromHtml("<font color='#FF7F27'>Sector Resume</font>"));
+        String title = mainContext.getResources().getString(R.string.resume_dialog_title);
+        ad.setTitle(Html.fromHtml("<font color='#FF7F27'>".concat(title).concat("</font>")));
         ad.setMessage(path.getSectorsMessage());
         ad.create();
         MyDatabase DB = new MyDatabase(mainContext);
@@ -158,7 +158,7 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
                 mainContext.startActivity(welcomeActivity);
                 finish();
             }
-        }, 5000);
+        }, 12000);
 
     }
 

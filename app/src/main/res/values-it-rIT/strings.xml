@@ -42,4 +42,6 @@
     <string name="news_category_tech">Tecnologia</string>
     <string name="news_category_none">Nessuna</string>
 
+    <string name="resume_dialog_title">Resoconto settori</string>
+
 </resources>
