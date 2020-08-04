@@ -83,6 +83,7 @@
             android:id="@+id/settore_1_val"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="50.54"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.306"
@@ -115,16 +116,18 @@
         <TextView
             android:id="@+id/pathTitle"
             style="@style/path_head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="171dp"
+            android:layout_height="91dp"
+            android:text="Sopraelevata dir. Levante"
+            android:textAlignment="center"
             android:textAppearance="@style/path_head"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.786"
+            app:layout_constraintHorizontal_bias="0.901"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/pathDate"
-            app:layout_constraintVertical_bias="0.493" />
+            app:layout_constraintVertical_bias="0.643" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
