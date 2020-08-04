@@ -76,7 +76,6 @@ public class MyLazyLocationListener implements LocationListener {
 
         for (MyPath path : paths) {
             Log.d(TAG, path.getName().concat(String.valueOf(path.getStart().distanceTo(location))));
-
             if (path.getStart().distanceTo(location) < checkPointDistance) {
                 Log.d(TAG, "Starting path: ".concat(path.getName()));
                 Intent mainActivity = new Intent(welcomeActivity, MainActivity.class);
