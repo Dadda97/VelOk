@@ -55,10 +55,13 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
     boolean isOverSpeed_notification_enabled;
     boolean overspeed_notification_loop;
     int GPSIntervalSec;
+    //  Location prev = new Location("");        //FOR EMULATOR GPS PROBLEM ANALYSIS
+
 
     public MyLocationListener(MyPath startedPath, Context mainContext_, int GPSInterval) {
         speedList = new MySpeedList();
-
+        //  prev.setLongitude(8.928097);        //FOR EMULATOR GPS PROBLEM ANALYSIS
+        //  prev.setLatitude(44.408727);        //FOR EMULATOR GPS PROBLEM ANALYSIS
         path = startedPath;
         mainContext = mainContext_;
         mainActivity = (Activity) mainContext_;
@@ -91,9 +94,11 @@ public class MyLocationListener extends AppCompatActivity implements LocationLis
         float speed = (location.getSpeed()*3600)/1000;
         Log.d(TAG,"location change listener");
         Log.d(TAG,String.format("Curr Speed M/S %2f K/M %2f",location.getSpeed(),speed));
+        Log.d(TAG,location.toString());
         double checkPointDistance =(speed/2)*GPSIntervalSec;
-
-        sectorsView.setText(String.format("check: %2f  \n Distanza: %2f\n Velocità: %2f KM/H",checkPointDistance,path.getStart().distanceTo(location),speed));     //FOR PHYSICAL DEVICE DEBUG PURPOSE
+        //  Log.d(TAG, String.format("velocita da coord: %2f, velocita da getSpeed: %2f ",(prev.distanceTo(location)*3600)/1000,speed));        //FOR EMULATOR GPS PROBLEM ANALYSIS
+        //  prev= location;                                                                                                                     //FOR EMULATOR GPS PROBLEM ANALYSIS
+       //   sectorsView.setText(String.format("check: %2f  \n Distanza: %2f\n Velocità: %2f KM/H",checkPointDistance,path.getStart().distanceTo(location),speed));     //FOR PHYSICAL DEVICE DEBUG PURPOSE
 
         Log.d(TAG,String.format("checkPointDistance %2f",checkPointDistance));
         if (!isMonitoring) {
